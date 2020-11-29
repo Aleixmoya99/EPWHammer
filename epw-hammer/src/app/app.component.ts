@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'epw-hammer';
+  title = 'EPWHammer';
+  subtitle = 'The App for Effective Warhammer 40k Players'
 }

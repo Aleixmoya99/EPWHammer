@@ -124,5 +124,8 @@
       }
     }
   },
-  "defaultProject": "epw-hammer"
+  "defaultProject": "epw-hammer",
+  "cli": {
+    "analytics": "fe848532-255b-4344-b019-ff1d6c08da21"
+  }
 }
