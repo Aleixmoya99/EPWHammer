@@ -1,5 +1,35 @@
 <main>
   <h2>Average Chosen EPWHammer</h2>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Range</th>
+    </tr>
+    <tr *ngFor="let gun of guns" (click)="onSelect(gun)">
+      <td>{{gun.name}}</td>
+      <td>{{gun.Range}}</td>
+    </tr>
+  </table>
+<table> 
+  <tr> 
+    <th>Name</th> 
+    <th>Range (inches)</th> 
+    <th>Type</th> 
+    <th>Strength</th> 
+    <th>AP</th> 
+    <th>Damage</th> 
+    <th>Ability</th> 
+  </tr> 
+  <tr> 
+    <td>{{selectedGun.name}}</td> 
+    <td>{{selectedGun.Range}}</td> 
+    <td>{{selectedGun.Type}} {{selectedGun.NoS}}</td> 
+    <td>{{selectedGun.S}}</td> 
+    <td>{{selectedGun.Ap}}</td> 
+    <td>{{selectedGun.D}}</td> 
+    <td>{{selectedGun.Ability}}</td> 
+  </tr> 
+</table>
 <div class="button_cont" ><a class="example_f" href="/averageModifiers"><span>Add Modifier</span></a></div>
 <div class="button_cont" ><a class="example_f" href="/averagesMenu"><span>Back</span></a></div>
 </main>

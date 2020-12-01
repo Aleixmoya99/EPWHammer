@@ -1,6 +1,29 @@
 <header>
-    <img src="../assets/images/Logo.png">
-    <a routerLink="home"><span><h1>{{title}}</h1></span></a>
-    <sub>{{subtitle}}</sub>  
+    <a routerLink="home" id="imageLogo"><span style="margin-top: 10px"><img src="../assets/images/Logo.png"></span></a>
+    <div id="titleText">
+        <a routerLink="home"><span><h1>{{title}}</h1></span></a>
+        <sub class="subtitle">{{subtitle}}</sub>  
+    </div>
 </header>
-<router-outlet></router-outlet>
+<main>
+    <router-outlet></router-outlet>
+</main>
+<footer>
+    <div id="mainFooter">
+        <div id="footerText">
+            <p>About</p>
+            <p>Contact</p>
+        </div>
+        <div id="footerText">
+            <p>Basic Rules</p>
+            <p>Features</p>
+        </div>
+        <div id="footerText">
+            <p>News</p>
+            <p>Patches</p>
+        </div>
+    </div>
+    <br>
+    <sub>You can go back to home if you click the logo</sub>
+
+</footer>
