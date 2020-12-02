@@ -17,7 +17,7 @@ import { VersusOptionsComponent } from './versus-options/versus-options.componen
 import { AveragesMenuComponent } from './averages-menu/averages-menu.component';
 import { AverageChosenComponent } from './average-chosen/average-chosen.component';
 import { AverageModifiersComponent } from './average-modifiers/average-modifiers.component';
-
+import { IssueService } from './issue.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -41,7 +41,7 @@ import { AverageModifiersComponent } from './average-modifiers/average-modifiers
     AppRoutingModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [IssueService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

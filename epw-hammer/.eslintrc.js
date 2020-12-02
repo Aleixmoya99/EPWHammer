@@ -23,5 +23,7 @@ module.exports = {
     'import/extensions': 'off',
     'import/no-unresolved': 'off',
     'max-len': ['error', { code: 130 }],
+    'no-useless-constructor': 'off',
+    '@typescript-eslint/no-useless-constructor': ['error'],
   },
 };

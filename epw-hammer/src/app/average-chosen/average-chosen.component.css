@@ -41,3 +41,13 @@ main   {
   opacity: 1;
   right: 0;
 }
+#allweaponTable{
+  overflow-y:scroll;
+  height:200px;
+  display:block;
+}
+#selctedweaponTable{
+  overflow-x:scroll;
+  width:90%;
+  display:block;
+}

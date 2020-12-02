@@ -1,16 +1,14 @@
 <main>
   <h2>Average Chosen EPWHammer</h2>
-  <table>
+  <table id="allweaponTable">
     <tr>
       <th>Name</th>
-      <th>Range</th>
     </tr>
-    <tr *ngFor="let gun of guns" (click)="onSelect(gun)">
+    <tr *ngFor="let gun of guns$ | async" (click)="onSelect(gun)">
       <td>{{gun.name}}</td>
-      <td>{{gun.Range}}</td>
     </tr>
   </table>
-<table> 
+<table id="selctedweaponTable"> 
   <tr> 
     <th>Name</th> 
     <th>Range (inches)</th> 
@@ -19,16 +17,84 @@
     <th>AP</th> 
     <th>Damage</th> 
     <th>Ability</th> 
+    <th>Cost</th>
   </tr> 
   <tr> 
-    <td>{{selectedGun.name}}</td> 
-    <td>{{selectedGun.Range}}</td> 
-    <td>{{selectedGun.Type}} {{selectedGun.NoS}}</td> 
-    <td>{{selectedGun.S}}</td> 
-    <td>{{selectedGun.Ap}}</td> 
-    <td>{{selectedGun.D}}</td> 
-    <td>{{selectedGun.Ability}}</td> 
-  </tr> 
+    <td><span>{{name}}</span></td>
+    <td><span>{{range}}</span></td>
+    <td><span>{{type}} {{nos}}</span></td>
+    <td><span>{{strength}}</span></td>
+    <td><span>{{armourPenetration}}</span></td>
+    <td><span>{{damage}}</span></td>
+    <td><span>{{ability}}</span></td>
+    <td><span>{{points}}</span></td>
+  </tr>
+  <tr> 
+    <td><span>{{overcharged}}</span></td>
+    <td></td>
+    <td></td>
+    <td><span>{{overchargedStrength}}</span></td>
+    <td><span>{{overchargedAP}}</span></td>
+    <td><span>{{overchargedD}}</span></td>
+    <td><span>{{overchargedAbility}}</span></td>
+    <td></td>
+  </tr>
+  <tr> 
+    <td><span>{{gunProfile(0)}}</span></td>
+    <td><span>{{gunProfileRange(0)}}</span></td>
+    <td><span>{{gunProfileType(0)}}{{gunProfileNoS(0)}}</span></td>
+    <td><span>{{gunProfileStrength(0)}}</span></td>
+    <td><span>{{gunProfileAp(0)}}</span></td>
+    <td><span>{{gunProfileDamage(0)}}</span></td>
+    <td><span>{{gunProfileAbility(0)}}</span></td>
+  </tr>
+  <tr> 
+    <td><span>{{gunProfile(1)}}</span></td>
+    <td><span>{{gunProfileRange(1)}}</span></td>
+    <td><span>{{gunProfileType(1)}}{{gunProfileNoS(1)}}</span></td>
+    <td><span>{{gunProfileStrength(1)}}</span></td>
+    <td><span>{{gunProfileAp(1)}}</span></td>
+    <td><span>{{gunProfileDamage(1)}}</span></td>
+    <td><span>{{gunProfileAbility(1)}}</span></td>
+  </tr>
+  <tr> 
+    <td><span>{{gunProfile(2)}}</span></td>
+    <td><span>{{gunProfileRange(2)}}</span></td>
+    <td><span>{{gunProfileType(2)}}{{gunProfileNoS(2)}}</span></td>
+    <td><span>{{gunProfileStrength(2)}}</span></td>
+    <td><span>{{gunProfileAp(2)}}</span></td>
+    <td><span>{{gunProfileDamage(2)}}</span></td>
+    <td><span>{{gunProfileAbility(2)}}</span></td>
+  </tr>
+  <tr> 
+    <td><span>{{gunProfile(3)}}</span></td>
+    <td><span>{{gunProfileRange(3)}}</span></td>
+    <td><span>{{gunProfileType(3)}}{{gunProfileNoS(3)}}</span></td>
+    <td><span>{{gunProfileStrength(3)}}</span></td>
+    <td><span>{{gunProfileAp(3)}}</span></td>
+    <td><span>{{gunProfileDamage(3)}}</span></td>
+    <td><span>{{gunProfileAbility(3)}}</span></td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <th></th>
+    <th>MEQ</th>
+    <th>TEQ</th>
+    <th>GEQ</th>
+  </tr>
+  <tr>
+    <td>Wounds done</td>
+    <td>{{this.epwhammerService.calculateWounds(selectedGun, marineEquivalent.Toughness, marineEquivalent.Sv, marineEquivalent.SvIn)}}</td>
+    <td>{{this.epwhammerService.calculateWounds(selectedGun, terminatorEquivalent.Toughness, terminatorEquivalent.Sv, terminatorEquivalent.SvIn)}}</td>
+    <td>{{this.epwhammerService.calculateWounds(selectedGun, guardsmanEquivalent.Toughness, guardsmanEquivalent.Sv, guardsmanEquivalent.SvIn)}}</td>
+  </tr>
+  <tr>
+    <td>Models killed</td>
+    <td>{{this.epwhammerService.calculateDeadModels(selectedGun, marineEquivalent.Toughness, marineEquivalent.Sv, marineEquivalent.SvIn, marineEquivalent.W)}}</td>
+    <td>{{this.epwhammerService.calculateDeadModels(selectedGun, terminatorEquivalent.Toughness, terminatorEquivalent.Sv, terminatorEquivalent.SvIn, terminatorEquivalent.W)}}</td>
+    <td>{{this.epwhammerService.calculateDeadModels(selectedGun, guardsmanEquivalent.Toughness, guardsmanEquivalent.Sv, guardsmanEquivalent.SvIn, guardsmanEquivalent.W)}}</td>
+  </tr>
 </table>
 <div class="button_cont" ><a class="example_f" href="/averageModifiers"><span>Add Modifier</span></a></div>
 <div class="button_cont" ><a class="example_f" href="/averagesMenu"><span>Back</span></a></div>

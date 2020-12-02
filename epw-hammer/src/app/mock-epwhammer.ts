@@ -1,43 +1,20 @@
-import { Gun, MEQ } from './home';
+import { Unit } from './DataUnit';
 
-export const TEMPORAL: Gun[] = [
-  {
-    name: 'Absolvor Bolt Pistol',
-    points: 0,
-    Range: 18,
-    Type: 'Pistol',
-    NoS: 1,
-    S: 5,
-    Ap: -1,
-    D: 2,
-    Ability: '',
-  },
-  {
-    name: 'Accelerator Autocannon',
-    points: 0,
-    Range: 48,
-    Type: 'Heavy',
-    NoS: 3,
-    S: 7,
-    Ap: -1,
-    D: 2,
-    Ability: '',
-  },
-  {
-    name: 'Assault Bolter',
-    points: 0,
-    Range: 18,
-    Type: 'Assault',
-    NoS: 3,
-    S: 5,
-    Ap: -1,
-    D: 1,
-    Ability: '',
-  },
-];
-
-export const MARINE: MEQ = {
+export const MEQ: Unit = {
   Toughness: 4,
   W: 2,
   Sv: 3,
+  SvIn: 7,
+};
+export const TEQ: Unit = {
+  Toughness: 4,
+  W: 3,
+  Sv: 2,
+  SvIn: 5,
+};
+export const GEQ: Unit = {
+  Toughness: 3,
+  W: 1,
+  Sv: 5,
+  SvIn: 7,
 };

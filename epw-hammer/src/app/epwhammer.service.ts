@@ -1,22 +1,11 @@
 /* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { Gun } from './home';
-import { TEMPORAL } from './mock-epwhammer';
-
-const { connect } = require('mongoose');
-
-connect('mongodb://localhost/wargeardb', { useNewUrlParser: true, useUnifiedTopology: true });
-
 @Injectable({
   providedIn: 'root',
 })
 
 export class EpwhammerService {
-  getWargear(): Observable<Gun[]> {
-    return of(TEMPORAL);
-  }
-
   chooseSv(Ap: number, Sv: number, SvI: number): number {
     let usedSv: number;
     let SvInv = SvI;
@@ -24,7 +13,7 @@ export class EpwhammerService {
       SvInv = 7;
     }
     if ((Sv + Ap) < SvInv) {
-      usedSv = Sv;
+      usedSv = Sv - Ap;
     } else {
       usedSv = SvInv;
     }
@@ -81,6 +70,11 @@ export class EpwhammerService {
     return estimatedVal;
   }
 
+  calculations(gun: Gun, woundOn: number, chosenSv: number):number {
+    const result: number = this.estimateVal(gun.NoS) * woundOn * chosenSv;
+    return result;
+  }
+
   calculateWounds(gun: Gun, Toughness: number, Sv: number, SvInv: number): number {
     let woundOn: number = this.toWound(this.estimateVal(gun.S), Toughness);
     let chosenSv: number = this.chooseSv(this.estimateVal(gun.Ap), Sv, SvInv);
@@ -88,7 +82,35 @@ export class EpwhammerService {
     woundOn = (7 - woundOn) / 6;
     chosenSv = 1 - (7 - chosenSv) / 6;
 
-    const result: number = this.estimateVal(gun.NoS) * woundOn * chosenSv * this.estimateVal(gun.D);
+    let result: number = this.calculations(gun, woundOn, chosenSv) * this.estimateVal(gun.D);
+
+    result = parseFloat(result.toFixed(2));
+    return result;
+  }
+
+  calculateDeadModels(gun: Gun, Toughness: number, Sv: number, SvInv: number, wounds: number): number {
+    let woundOn: number = this.toWound(this.estimateVal(gun.S), Toughness);
+    let chosenSv: number = this.chooseSv(this.estimateVal(gun.Ap), Sv, SvInv);
+    let result: number = 0;
+    let i: number;
+    const damage: number = this.estimateVal(gun.D);
+    woundOn = (7 - woundOn) / 6;
+    chosenSv = 1 - (7 - chosenSv) / 6;
+
+    const effectiveDamage: number = (this.calculations(gun, woundOn, chosenSv));
+
+    if (damage === wounds) {
+      result = effectiveDamage;
+    } else if (damage > wounds) {
+      result = effectiveDamage;
+    } else if (damage < wounds) {
+      result = (effectiveDamage * damage) / wounds;
+      console.log(`efd ${effectiveDamage}`);
+      console.log(`dmg ${damage}`);
+      console.log(effectiveDamage * damage);
+      console.log((effectiveDamage * damage) / wounds);
+    }
+    result = parseFloat(result.toFixed(2));
     return result;
   }
 }
