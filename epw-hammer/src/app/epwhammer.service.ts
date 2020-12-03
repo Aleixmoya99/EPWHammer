@@ -105,10 +105,6 @@ export class EpwhammerService {
       result = effectiveDamage;
     } else if (damage < wounds) {
       result = (effectiveDamage * damage) / wounds;
-      console.log(`efd ${effectiveDamage}`);
-      console.log(`dmg ${damage}`);
-      console.log(effectiveDamage * damage);
-      console.log((effectiveDamage * damage) / wounds);
     }
     result = parseFloat(result.toFixed(2));
     return result;
