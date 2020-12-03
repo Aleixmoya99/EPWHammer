@@ -22,22 +22,4 @@ describe('AverageChosenComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should save a gun', () => {
-    const gun = {
-      name: 'Absolvor Bolt Pistol',
-      points: 0,
-      Range: 18,
-      Type: 'Pistol',
-      NoS: 1,
-      S: 5,
-      Ap: -1,
-      D: 2,
-      Ability: '',
-    };
-
-    component.onSelect(gun);
-
-    expect(component.selectedGun).toEqual(gun);
-  });
 });

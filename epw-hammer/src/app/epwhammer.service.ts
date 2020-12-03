@@ -32,7 +32,7 @@ export class EpwhammerService {
     if (S === T && result === 7) {
       result = 4;
     }
-    if (S < 2 * T && result === 7) {
+    if (S * 2 <= T && result === 7) {
       result = 6;
     }
     if (S < T && result === 7) {
@@ -62,6 +62,7 @@ export class EpwhammerService {
           estimatedVal = 5;
           break;
         default:
+          estimatedVal = NaN;
           break;
       }
     } else {
@@ -70,34 +71,38 @@ export class EpwhammerService {
     return estimatedVal;
   }
 
-  calculations(gun: Gun, woundOn: number, chosenSv: number):number {
-    const result: number = this.estimateVal(gun.NoS) * woundOn * chosenSv;
+  calculations(NoS : string | number, woundOn: number, chosenSv: number):number {
+    const result: number = this.estimateVal(NoS) * woundOn * chosenSv;
     return result;
   }
 
-  calculateWounds(gun: Gun, Toughness: number, Sv: number, SvInv: number): number {
-    let woundOn: number = this.toWound(this.estimateVal(gun.S), Toughness);
-    let chosenSv: number = this.chooseSv(this.estimateVal(gun.Ap), Sv, SvInv);
+  calculateWounds({
+    S, Ap, D, NoS,
+  }: Gun, Toughness: number, Sv: number, SvInv: number): number {
+    let woundOn: number = this.toWound(this.estimateVal(S), Toughness);
+    let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv);
 
     woundOn = (7 - woundOn) / 6;
     chosenSv = 1 - (7 - chosenSv) / 6;
 
-    let result: number = this.calculations(gun, woundOn, chosenSv) * this.estimateVal(gun.D);
+    let result: number = this.calculations(NoS, woundOn, chosenSv) * this.estimateVal(D);
 
     result = parseFloat(result.toFixed(2));
     return result;
   }
 
-  calculateDeadModels(gun: Gun, Toughness: number, Sv: number, SvInv: number, wounds: number): number {
-    let woundOn: number = this.toWound(this.estimateVal(gun.S), Toughness);
-    let chosenSv: number = this.chooseSv(this.estimateVal(gun.Ap), Sv, SvInv);
+  calculateDeadModels({
+    S, Ap, D, NoS,
+  }: Gun, Toughness: number, Sv: number, SvInv: number, wounds: number): number {
+    let woundOn: number = this.toWound(this.estimateVal(S), Toughness);
+    let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv);
     let result: number = 0;
     let i: number;
-    const damage: number = this.estimateVal(gun.D);
+    const damage: number = this.estimateVal(D);
     woundOn = (7 - woundOn) / 6;
     chosenSv = 1 - (7 - chosenSv) / 6;
 
-    const effectiveDamage: number = (this.calculations(gun, woundOn, chosenSv));
+    const effectiveDamage: number = (this.calculations(NoS, woundOn, chosenSv));
 
     if (damage === wounds) {
       result = effectiveDamage;
@@ -106,7 +111,7 @@ export class EpwhammerService {
     } else if (damage < wounds) {
       result = (effectiveDamage * damage) / wounds;
     }
-    result = parseFloat(result.toFixed(2));
+    result = Math.round((parseFloat(result.toFixed(2))) / wounds);
     return result;
   }
 }
