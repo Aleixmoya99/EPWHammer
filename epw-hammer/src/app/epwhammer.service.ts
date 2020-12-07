@@ -77,6 +77,12 @@ export class EpwhammerService {
         case 'D3 + 3':
           estimatedVal = 5;
           break;
+        case 'D6 + 2':
+          estimatedVal = 5.5;
+          break;
+        case 'D6 + 4':
+          estimatedVal = 7.5;
+          break;
         default:
           estimatedVal = NaN;
           break;
@@ -94,7 +100,7 @@ export class EpwhammerService {
 
   calculateWounds({
     S, Ap, D, NoS,
-  }: Gun, Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers): number {
+  }: Gun, Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers): number | string {
     let woundOn: number = this.toWound(this.estimateVal(S), Toughness, modifiers.Wound);
     let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers.Save);
     let Attacks: string | number = 1;
@@ -106,22 +112,22 @@ export class EpwhammerService {
     chosenSv = 1 - (7 - chosenSv) / 6;
     const thisFnP: number = 1 - (7 - FnP) / 6;
 
-    let result: number = this.calculations(Attacks, woundOn, chosenSv) * (this.estimateVal(D) * thisFnP);
+    let result: number | string = this.calculations(Attacks, woundOn, chosenSv) * (this.estimateVal(D) * thisFnP);
 
     result = parseFloat(result.toFixed(2));
     // eslint-disable-next-line no-restricted-globals
     if (isNaN(result)) {
-      result = 0;
+      result = '';
     }
     return result;
   }
 
   calculateDeadModels({
     S, Ap, D, NoS,
-  }: Gun, Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers, wounds: number): number {
+  }: Gun, Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers, wounds: number): number | string {
     let woundOn: number = this.toWound(this.estimateVal(S), Toughness, modifiers.Wound);
     let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers.Save);
-    let result: number = 0;
+    let result: number | string = 0;
     let i: number = -1;
     let Attacks: string | number = 1;
     if (NoS !== undefined) {
@@ -132,33 +138,42 @@ export class EpwhammerService {
     woundOn = (7 - woundOn) / 6;
     chosenSv = 1 - (7 - chosenSv) / 6;
 
-    const effectiveDamage: number = (this.calculations(Attacks, woundOn, chosenSv));
-
-    if (damage === wounds) {
-      result = effectiveDamage;
-    } else if (damage > wounds) {
-      result = effectiveDamage;
-    } else if (damage < wounds) {
-      let flag = effectiveDamage * damage;
-      while (flag >= 0) {
-        flag -= wounds;
-        i += 1;
+    const effectiveDamage: number | string = (this.calculations(Attacks, woundOn, chosenSv));
+    if (!isNaN(effectiveDamage) && typeof (effectiveDamage) === 'number') {
+      if (damage === wounds) {
+        result = effectiveDamage;
+      } else if (damage > wounds) {
+        result = effectiveDamage;
+      } else if (damage < wounds) {
+        let flag = effectiveDamage * damage;
+        while (flag >= 0) {
+          flag -= wounds;
+          i += 1;
+        }
+        result = i;
       }
-      result = i;
+      result = Math.round((parseFloat(result.toFixed(2))));
+    } else {
+      result = '';
     }
-    result = Math.round((parseFloat(result.toFixed(2))));
+
+    if (typeof (S) === 'undefined' || typeof (Ap) === 'undefined' || typeof (D) === 'undefined') {
+      result = '';
+    }
     return result;
   }
 
   factionAverageWounds(gun: Gun[], T: number, Sv: number, SvInv: number, FnP: number, modifiers:Modifiers): number {
     let i: number = 0;
     let total: number = 0;
-    let result: number = 0;
+    let result: number | string = 0;
     for (i; i < gun.length; i += 1) {
       result = this.calculateWounds(gun[i], T, Sv, SvInv, FnP, modifiers);
+      if (typeof (result) === 'number') {
       // eslint-disable-next-line no-restricted-globals
-      if (!isNaN(result)) {
-        total += result;
+        if (!isNaN(result)) {
+          total += result;
+        }
       }
     }
     total /= i;
@@ -169,12 +184,14 @@ export class EpwhammerService {
   : number {
     let i: number = 0;
     let total: number = 0;
-    let result: number = 0;
+    let result: number | string = 0;
     for (i; i < gun.length; i += 1) {
       result = this.calculateDeadModels(gun[i], T, Sv, SvInv, FnP, modifiers, wounds);
-      // eslint-disable-next-line no-restricted-globals
-      if (!isNaN(result)) {
-        total += result;
+      if (typeof (result) === 'number') {
+        // eslint-disable-next-line no-restricted-globals
+        if (!isNaN(result)) {
+          total += result;
+        }
       }
     }
     total /= i;

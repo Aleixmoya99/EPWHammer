@@ -1,7 +1,10 @@
 main   {
+  margin-top: 3%;
+  padding: 1%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #f7f7f7;
 }
 .button_cont{
     margin-bottom: 3%;
@@ -46,8 +49,55 @@ main   {
   height:200px;
   display:block;
 }
+table {
+  empty-cells: hide;
+ }
+#allweaponTable{
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5%;
+}
+th{
+  text-align: center;
+}
+#allweaponTable td, #allweaponTable th {
+  border: 1px solid #ddd;
+  width: 19em;
+  padding: 8px;
+}
+
+#allweaponTable tr:nth-child(even){background-color: #5ed462a4;}
+
+#allweaponTable tr:hover {background-color: #67ad6a8c;}
+
+#allweaponTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #4CAF50;
+  color: white;
+  position: sticky;
+  top: 0;
+}
 #selctedweaponTable{
   overflow-x:scroll;
   width:90%;
   display:block;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#selctedweaponTable td:{
+  margin-left: 5px;
+}
+
+#rowTitle{
+  text-align: left;
 }

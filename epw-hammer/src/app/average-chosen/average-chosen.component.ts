@@ -20,6 +20,8 @@ import {
 export class AverageChosenComponent implements AfterViewInit {
   selectedGun: any;
 
+  chart: any;
+
   actualmodifiers = modifiers;
 
   marineEquivalent = MEQ;
@@ -211,6 +213,33 @@ export class AverageChosenComponent implements AfterViewInit {
     return total;
   }
 
+  calculateMeltaDead(Equivalent:Unit, id:number) {
+    let total: number | string = '';
+    if (typeof (this.selectedGun.melta) !== 'undefined') {
+      const profileData = this.selectedGun.melta[Object.keys(this.selectedGun.melta)[id]];
+      if (typeof (profileData) !== 'undefined') {
+        const result = this.epwhammerService.calculateDeadModels(
+          profileData,
+          Equivalent.Toughness,
+          Equivalent.Sv,
+          Equivalent.SvIn,
+          Equivalent.FnP,
+          this.actualmodifiers,
+          Equivalent.W,
+        );
+        if (typeof (result) !== 'undefined' && result !== 0) {
+          total = result;
+        }
+        if (result === 0) {
+          total = '0';
+        } else {
+          total = result;
+        }
+      }
+    }
+    return total;
+  }
+
   calculateBasicWounds(Equivalent: Unit) {
     let total;
     const result = this.epwhammerService.calculateWounds(
@@ -240,10 +269,14 @@ export class AverageChosenComponent implements AfterViewInit {
       this.actualmodifiers,
       Equivalent.W,
     );
-    if (result === 0) {
-      total = '0';
+    if (typeof (result) === 'number') {
+      if (result === 0) {
+        total = '0';
+      } else {
+        total = result;
+      }
     } else {
-      total = result;
+      total = '';
     }
     return total || '';
   }
@@ -274,7 +307,7 @@ export class AverageChosenComponent implements AfterViewInit {
     return total || '';
   }
 
-  factionAverageWounds(Equivalent: Unit) {
+  factionAverageAllWounds(Equivalent: Unit) {
     let total;
     const result = this.epwhammerService.factionAverageWounds(
       this.allGuns,
@@ -472,11 +505,53 @@ export class AverageChosenComponent implements AfterViewInit {
 
   onSelect(gun: Gun): void {
     this.selectedGun = gun;
+    setTimeout(() => {
+      this.chart.load({
+        columns: [
+          ['Chosen', this.epwhammerService.calculateWounds(
+            this.selectedGun,
+            this.marineEquivalent.Toughness,
+            this.marineEquivalent.Sv,
+            this.marineEquivalent.SvIn,
+            this.marineEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.calculateWounds(
+            this.selectedGun,
+            this.terminatorEquivalent.Toughness,
+            this.terminatorEquivalent.Sv,
+            this.terminatorEquivalent.SvIn,
+            this.terminatorEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.calculateWounds(
+            this.selectedGun,
+            this.guardsmanEquivalent.Toughness,
+            this.guardsmanEquivalent.Sv,
+            this.guardsmanEquivalent.SvIn,
+            this.guardsmanEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.calculateWounds(
+            this.selectedGun,
+            this.vehicleEquivalent.Toughness,
+            this.vehicleEquivalent.Sv,
+            this.vehicleEquivalent.SvIn,
+            this.vehicleEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.calculateWounds(
+            this.selectedGun,
+            this.knightEquivalent.Toughness,
+            this.knightEquivalent.Sv,
+            this.knightEquivalent.SvIn,
+            this.knightEquivalent.FnP,
+            this.actualmodifiers,
+          )],
+        ],
+      });
+    }, 500);
   }
 
   // eslint-disable-next-line class-methods-use-this
   ngAfterViewInit(): void {
-    const chart = c3.generate({
+    this.chart = c3.generate({
       bindto: '#chart',
       data: {
         x: 'x',
@@ -569,5 +644,47 @@ export class AverageChosenComponent implements AfterViewInit {
         show: true,
       },
     });
+    setTimeout(() => {
+      this.chart.load({
+        columns: [
+          ['Chosen', this.epwhammerService.calculateWounds(
+            this.selectedGun,
+            this.marineEquivalent.Toughness,
+            this.marineEquivalent.Sv,
+            this.marineEquivalent.SvIn,
+            this.marineEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.calculateWounds(
+            this.selectedGun,
+            this.terminatorEquivalent.Toughness,
+            this.terminatorEquivalent.Sv,
+            this.terminatorEquivalent.SvIn,
+            this.terminatorEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.calculateWounds(
+            this.selectedGun,
+            this.guardsmanEquivalent.Toughness,
+            this.guardsmanEquivalent.Sv,
+            this.guardsmanEquivalent.SvIn,
+            this.guardsmanEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.calculateWounds(
+            this.selectedGun,
+            this.vehicleEquivalent.Toughness,
+            this.vehicleEquivalent.Sv,
+            this.vehicleEquivalent.SvIn,
+            this.vehicleEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.calculateWounds(
+            this.selectedGun,
+            this.knightEquivalent.Toughness,
+            this.knightEquivalent.Sv,
+            this.knightEquivalent.SvIn,
+            this.knightEquivalent.FnP,
+            this.actualmodifiers,
+          )],
+        ],
+      });
+    }, 1000);
   }
 }

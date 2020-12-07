@@ -36,8 +36,11 @@ describe('AverageChosenComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should call get Array', () => {
+    // eslint-disable-next-line no-undef
+    const spyFn = spyOn(component, 'getArray').and.callThrough();
+    component.getArray();
+    expect(spyFn).toHaveBeenCalled();
   });
 });
 describe('test onSelect', () => {

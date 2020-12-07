@@ -29,10 +29,6 @@ export class IssueService {
     return this.http.get<Gun>(`${this.endpoint}/issues/${id}`);
   }
 
-  addIssue(gun: Gun): Observable<Gun> {
-    return this.http.post<Gun>(this.endpoint, gun, this.httpOptions);
-  }
-
   deleteIssue(id: any) {
     return this.http.get(`${this.endpoint}/issues/delete/${id}`);
   }
