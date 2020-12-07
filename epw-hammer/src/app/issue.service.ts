@@ -1,7 +1,7 @@
 /* eslint-disable no-empty-function */
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
 import { Gun } from './home';
 
 @Injectable({
@@ -10,25 +10,27 @@ import { Gun } from './home';
 export class IssueService {
   endpoint = 'http://localhost:5000';
 
+  httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    }),
+  }
+
   // eslint-disable-next-line no-unused-vars
   constructor(private http: HttpClient) { }
+
+  allGuns$ = new Subject <Gun[]>()
 
   getIssues(): Observable <Gun[]> {
     return this.http.get<Gun[]>(`${this.endpoint}/`);
   }
 
   getIssueById(id: any) {
-    return this.http.get(`${this.endpoint}/issues/${id}`);
+    return this.http.get<Gun>(`${this.endpoint}/issues/${id}`);
   }
 
-  addIssue(title: any, responsible: any, description: any, severity: any) {
-    const issue = {
-      title,
-      responsible,
-      description,
-      severity,
-    };
-    return this.http.post(`${this.endpoint}/issues/add`, issue);
+  addIssue(gun: Gun): Observable<Gun> {
+    return this.http.post<Gun>(this.endpoint, gun, this.httpOptions);
   }
 
   deleteIssue(id: any) {

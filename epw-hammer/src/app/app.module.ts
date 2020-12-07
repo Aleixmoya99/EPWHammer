@@ -14,7 +14,6 @@ import { VersusBeginComponent } from './versus-begin/versus-begin.component';
 import { VersusOutputComponent } from './versus-output/versus-output.component';
 import { VersusModifiersComponent } from './versus-modifiers/versus-modifiers.component';
 import { VersusOptionsComponent } from './versus-options/versus-options.component';
-import { AveragesMenuComponent } from './averages-menu/averages-menu.component';
 import { AverageChosenComponent } from './average-chosen/average-chosen.component';
 import { AverageModifiersComponent } from './average-modifiers/average-modifiers.component';
 import { IssueService } from './issue.service';
@@ -31,7 +30,6 @@ import { IssueService } from './issue.service';
     VersusOutputComponent,
     VersusModifiersComponent,
     VersusOptionsComponent,
-    AveragesMenuComponent,
     AverageChosenComponent,
     AverageModifiersComponent,
   ],

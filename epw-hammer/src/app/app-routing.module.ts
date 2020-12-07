@@ -11,7 +11,6 @@ import { VersusChooseComponent } from './versus-choose/versus-choose.component';
 import { VersusModifiersComponent } from './versus-modifiers/versus-modifiers.component';
 import { VersusOptionsComponent } from './versus-options/versus-options.component';
 import { VersusOutputComponent } from './versus-output/versus-output.component';
-import { AveragesMenuComponent } from './averages-menu/averages-menu.component';
 import { AverageChosenComponent } from './average-chosen/average-chosen.component';
 import { AverageModifiersComponent } from './average-modifiers/average-modifiers.component';
 
@@ -25,7 +24,6 @@ const routes: Routes = [
   { path: 'versusCustomMenu', component: VersusCustomMenuComponent },
   { path: 'versusCustomInsertUnit', component: VersusCustomInsertUnitComponent },
   { path: 'versusCustomInsertWeapon', component: VersusCustomInsertWeaponComponent },
-  { path: 'averagesMenu', component: AveragesMenuComponent },
   { path: 'averageChoose', component: AverageChosenComponent },
   { path: 'averageModifiers', component: AverageModifiersComponent },
   { path: 'home', component: HomeComponent },

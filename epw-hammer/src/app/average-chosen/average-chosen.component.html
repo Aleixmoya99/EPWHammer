@@ -75,27 +75,163 @@
     <td><span>{{gunProfileDamage(3)}}</span></td>
     <td><span>{{gunProfileAbility(3)}}</span></td>
   </tr>
+  <tr>
+    <td><span>{{getMeltaGunProfile(0)}}</span></td>
+    <td><span>{{getMeltaGunRange(0)}}</span></td>
+    <td><span>{{getMeltaGunType(0)}}{{getMeltaGunNoS(0)}}</span></td>
+    <td><span>{{getMeltaGunS(0)}}</span></td>
+    <td><span>{{getMeltaGunAp(0)}}</span></td>
+    <td><span>{{getMeltaGunD(0)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{getMeltaGunProfile(1)}}</span></td>
+    <td><span>{{getMeltaGunRange(1)}}</span></td>
+    <td><span>{{getMeltaGunType(1)}}{{getMeltaGunNoS(1)}}</span></td>
+    <td><span>{{getMeltaGunS(1)}}</span></td>
+    <td><span>{{getMeltaGunAp(1)}}</span></td>
+    <td><span>{{getMeltaGunD(1)}}</span></td>
+  </tr>
 </table>
-<table>
+<table id="selctedweaponTable">
   <tr>
     <th></th>
     <th>MEQ</th>
     <th>TEQ</th>
     <th>GEQ</th>
+    <th>VEQ</th>
+    <th>KEQ</th>
   </tr>
   <tr>
     <td>Wounds done</td>
-    <td>{{this.epwhammerService.calculateWounds(selectedGun, marineEquivalent.Toughness, marineEquivalent.Sv, marineEquivalent.SvIn)}}</td>
-    <td>{{this.epwhammerService.calculateWounds(selectedGun, terminatorEquivalent.Toughness, terminatorEquivalent.Sv, terminatorEquivalent.SvIn)}}</td>
-    <td>{{this.epwhammerService.calculateWounds(selectedGun, guardsmanEquivalent.Toughness, guardsmanEquivalent.Sv, guardsmanEquivalent.SvIn)}}</td>
+    <td><span>{{calculateBasicWounds(marineEquivalent)}}</span></td>
+    <td><span>{{calculateBasicWounds(terminatorEquivalent)}}</span></td>
+    <td><span>{{calculateBasicWounds(guardsmanEquivalent)}}</span></td>
+    <td><span>{{calculateBasicWounds(vehicleEquivalent)}}</span></td>
+    <td><span>{{calculateBasicWounds(knightEquivalent)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{this.selectedGun.Overcharged ? 'Overcharged': ''}}</span></td>
+    <td><span>{{calculateOverchargedWounds(marineEquivalent)}}</span></td>
+    <td><span>{{calculateOverchargedWounds(terminatorEquivalent)}}</span></td>
+    <td><span>{{calculateOverchargedWounds(guardsmanEquivalent)}}</span></td>
+    <td><span>{{calculateOverchargedWounds(vehicleEquivalent)}}</span></td>
+    <td><span>{{calculateOverchargedWounds(knightEquivalent)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{gunProfile(0) ? gunProfile(0): ''}}</span></td>
+    <td><span>{{calculateProfileWounds(marineEquivalent, 0)}}</span></td>
+    <td><span>{{calculateProfileWounds(terminatorEquivalent, 0)}}</span></td>
+    <td><span>{{calculateProfileWounds(guardsmanEquivalent, 0)}}</span></td>
+    <td><span>{{calculateProfileWounds(vehicleEquivalent, 0)}}</span></td>
+    <td><span>{{calculateProfileWounds(knightEquivalent, 0)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{gunProfile(1) ? gunProfile(1): ''}}</span></td>
+    <td><span>{{calculateProfileWounds(marineEquivalent, 1)}}</span></td>
+    <td><span>{{calculateProfileWounds(terminatorEquivalent, 1)}}</span></td>
+    <td><span>{{calculateProfileWounds(guardsmanEquivalent, 1)}}</span></td>
+    <td><span>{{calculateProfileWounds(vehicleEquivalent, 1)}}</span></td>
+    <td><span>{{calculateProfileWounds(knightEquivalent, 1)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{gunProfile(2) ? gunProfile(2): ''}}</span></td>
+    <td><span>{{calculateProfileWounds(marineEquivalent, 2)}}</span></td>
+    <td><span>{{calculateProfileWounds(terminatorEquivalent, 2)}}</span></td>
+    <td><span>{{calculateProfileWounds(guardsmanEquivalent, 2)}}</span></td>
+    <td><span>{{calculateProfileWounds(vehicleEquivalent, 2)}}</span></td>
+    <td><span>{{calculateProfileWounds(knightEquivalent, 2)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{gunProfile(3) ? gunProfile(3): ''}}</span></td>
+    <td><span>{{calculateProfileWounds(marineEquivalent, 3)}}</span></td>
+    <td><span>{{calculateProfileWounds(terminatorEquivalent, 3)}}</span></td>
+    <td><span>{{calculateProfileWounds(guardsmanEquivalent, 3)}}</span></td>
+    <td><span>{{calculateProfileWounds(vehicleEquivalent, 3)}}</span></td>
+    <td><span>{{calculateProfileWounds(knightEquivalent, 3)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{getMeltaGunProfile(0) ? getMeltaGunProfile(0): ''}}</span></td>
+    <td><span>{{calculateMeltaWounds(marineEquivalent, 0)}}</span></td>
+    <td><span>{{calculateMeltaWounds(terminatorEquivalent, 0)}}</span></td>
+    <td><span>{{calculateMeltaWounds(guardsmanEquivalent, 0)}}</span></td>
+    <td><span>{{calculateMeltaWounds(vehicleEquivalent, 0)}}</span></td>
+    <td><span>{{calculateMeltaWounds(knightEquivalent, 0)}}</span></td>
+  </tr> 
+  <tr>
+    <td><span>{{getMeltaGunProfile(1) ? getMeltaGunProfile(1) : ''}}</span></td>
+    <td><span>{{calculateMeltaWounds(marineEquivalent, 1)}}</span></td>
+    <td><span>{{calculateMeltaWounds(terminatorEquivalent, 1)}}</span></td>
+    <td><span>{{calculateMeltaWounds(guardsmanEquivalent, 1)}}</span></td>
+    <td><span>{{calculateMeltaWounds(vehicleEquivalent, 1)}}</span></td>
+    <td><span>{{calculateMeltaWounds(knightEquivalent, 1)}}</span></td>
   </tr>
   <tr>
     <td>Models killed</td>
-    <td>{{this.epwhammerService.calculateDeadModels(selectedGun, marineEquivalent.Toughness, marineEquivalent.Sv, marineEquivalent.SvIn, marineEquivalent.W)}}</td>
-    <td>{{this.epwhammerService.calculateDeadModels(selectedGun, terminatorEquivalent.Toughness, terminatorEquivalent.Sv, terminatorEquivalent.SvIn, terminatorEquivalent.W)}}</td>
-    <td>{{this.epwhammerService.calculateDeadModels(selectedGun, guardsmanEquivalent.Toughness, guardsmanEquivalent.Sv, guardsmanEquivalent.SvIn, guardsmanEquivalent.W)}}</td>
+    <td><span>{{calculateBasicDead(marineEquivalent)}}</span></td>
+    <td><span>{{calculateBasicDead(terminatorEquivalent)}}</span></td>
+    <td><span>{{calculateBasicDead(guardsmanEquivalent)}}</span></td>
+    <td><span>{{calculateBasicDead(vehicleEquivalent)}}</span></td>
+    <td><span>{{calculateBasicDead(knightEquivalent)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{this.selectedGun.Overcharged ? 'Overcharged': ''}}</span></td>
+    <td><span>{{calculateOverchargedDead(marineEquivalent)}}</span></td>
+    <td><span>{{calculateOverchargedDead(terminatorEquivalent)}}</span></td>
+    <td><span>{{calculateOverchargedDead(guardsmanEquivalent)}}</span></td>
+    <td><span>{{calculateOverchargedDead(vehicleEquivalent)}}</span></td>
+    <td><span>{{calculateOverchargedDead(knightEquivalent)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{gunProfile(0) ? gunProfile(0): ''}}</span></td>
+    <td><span>{{calculateProfileDead(marineEquivalent, 0)}}</span></td>
+    <td><span>{{calculateProfileDead(terminatorEquivalent, 0)}}</span></td>
+    <td><span>{{calculateProfileDead(guardsmanEquivalent, 0)}}</span></td>
+    <td><span>{{calculateProfileDead(vehicleEquivalent, 0)}}</span></td>
+    <td><span>{{calculateProfileDead(knightEquivalent, 0)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{gunProfile(1) ? gunProfile(1): ''}}</span></td>
+    <td><span>{{calculateProfileDead(marineEquivalent, 1)}}</span></td>
+    <td><span>{{calculateProfileDead(terminatorEquivalent, 1)}}</span></td>
+    <td><span>{{calculateProfileDead(guardsmanEquivalent, 1)}}</span></td>
+    <td><span>{{calculateProfileDead(vehicleEquivalent, 1)}}</span></td>
+    <td><span>{{calculateProfileDead(knightEquivalent, 1)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{gunProfile(2) ? gunProfile(2): ''}}</span></td>
+    <td><span>{{calculateProfileDead(marineEquivalent, 2)}}</span></td>
+    <td><span>{{calculateProfileDead(terminatorEquivalent, 2)}}</span></td>
+    <td><span>{{calculateProfileDead(guardsmanEquivalent, 2)}}</span></td>
+    <td><span>{{calculateProfileDead(vehicleEquivalent, 2)}}</span></td>
+    <td><span>{{calculateProfileDead(knightEquivalent, 2)}}</span></td>
+  </tr>
+  <tr>
+    <td><span>{{gunProfile(3) ? gunProfile(3): ''}}</span></td>
+    <td><span>{{calculateProfileDead(marineEquivalent, 3)}}</span></td>
+    <td><span>{{calculateProfileDead(terminatorEquivalent, 3)}}</span></td>
+    <td><span>{{calculateProfileDead(guardsmanEquivalent, 3)}}</span></td>
+    <td><span>{{calculateProfileDead(vehicleEquivalent, 3)}}</span></td>
+    <td><span>{{calculateProfileDead(knightEquivalent, 3)}}</span></td>
+  </tr>
+  <tr>
+    <td>Wounds done (faction Average)</td>
+    <td><span>{{factionAverageWounds(marineEquivalent)}}</span></td>
+    <td><span>{{factionAverageWounds(terminatorEquivalent)}}</span></td>
+    <td><span>{{factionAverageWounds(guardsmanEquivalent)}}</span></td>
+    <td><span>{{factionAverageWounds(vehicleEquivalent)}}</span></td>
+    <td><span>{{factionAverageWounds(knightEquivalent)}}</span></td>
+  </tr>
+  <tr>
+    <td>Models Killed (faction Average)</td>
+    <td><span>{{factionAverageModelsKilled(marineEquivalent)}}</span></td>
+    <td><span>{{factionAverageModelsKilled(terminatorEquivalent)}}</span></td>
+    <td><span>{{factionAverageModelsKilled(guardsmanEquivalent)}}</span></td>
+    <td><span>{{factionAverageModelsKilled(vehicleEquivalent)}}</span></td>
+    <td><span>{{factionAverageModelsKilled(knightEquivalent)}}</span></td>
   </tr>
 </table>
+
+<div id="chart"></div>
 <div class="button_cont" ><a class="example_f" href="/averageModifiers"><span>Add Modifier</span></a></div>
-<div class="button_cont" ><a class="example_f" href="/averagesMenu"><span>Back</span></a></div>
+<div class="button_cont" ><a class="example_f" href="/home"><span>Back</span></a></div>
 </main>

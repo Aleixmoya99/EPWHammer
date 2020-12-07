@@ -3,4 +3,5 @@ export interface Unit {
     W: number;
     Sv: number;
     SvIn: number;
+    FnP: number;
 }

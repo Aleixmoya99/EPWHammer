@@ -9,7 +9,6 @@ import { IssueService } from './issue.service';
 })
 export class AppComponent {
   // eslint-disable-next-line no-empty-function
-  constructor(private issueService: IssueService, private router: Router) { }
 
   title = 'EPWHammer';
 
