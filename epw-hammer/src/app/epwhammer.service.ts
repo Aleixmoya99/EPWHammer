@@ -151,7 +151,13 @@ export class EpwhammerService {
     chosenSv = 1 - (7 - chosenSv) / 6;
     const thisFnP: number = 1 - (7 - Math.min(FnP, modifiers.FnP)) / 6;
 
-    let result: number | string = this.calculations(Attacks, woundOn, chosenSv) * (this.estimateVal(D) * thisFnP);
+    let dmg:number = (this.estimateVal(D) - modifiers.Damage);
+
+    if (dmg < 1) {
+      dmg = 1;
+    }
+
+    let result: number | string = this.calculations(Attacks, woundOn, chosenSv) * (dmg * thisFnP);
 
     result = parseFloat(result.toFixed(2));
     if (isNaN(result)) {

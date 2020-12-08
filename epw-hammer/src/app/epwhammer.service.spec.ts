@@ -389,6 +389,42 @@ describe('function Calculate Wounds test', () => {
     }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save });
     expect(result).toEqual(0.25);
   });
+  it('damage modifier reduces damage taken', () => {
+    const S: number | string = 'User';
+    const Range: string = 'Melee';
+    const Ap: number = -1;
+    const NoS: number | string = 1;
+    const D: number | string = 2;
+    const Toughness: number = 4;
+    const Sv: number = 3;
+    const SvInv: number = 7;
+    const FnP: number = 7;
+    const Wound: number = 0;
+    const Damage: number = 1;
+
+    const result = service.calculateWounds({
+      ...gun, S, Ap, NoS, D, Range,
+    }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Damage });
+    expect(result).toEqual(0.25);
+  });
+  it('damage modifier reduces damage but no below 0', () => {
+    const S: number | string = 'User';
+    const Range: string = 'Melee';
+    const Ap: number = -1;
+    const NoS: number | string = 1;
+    const D: number | string = 1;
+    const Toughness: number = 4;
+    const Sv: number = 3;
+    const SvInv: number = 7;
+    const FnP: number = 7;
+    const Wound: number = 0;
+    const Damage: number = 1;
+
+    const result = service.calculateWounds({
+      ...gun, S, Ap, NoS, D, Range,
+    }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Damage });
+    expect(result).toEqual(0.25);
+  });
   it('calculateWounds should return 0,25', () => {
     const S: number = 4;
     const Ap: number = -1;
