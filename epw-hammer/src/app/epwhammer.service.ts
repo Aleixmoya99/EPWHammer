@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
 import { Gun } from './home';
@@ -7,12 +8,40 @@ import { Modifiers } from './DataModifiers';
 })
 
 export class EpwhammerService {
-  chooseSv(Ap: number, Sv: number, SvI: number, SvModifier: number): number {
+  currentModifiers: Modifiers | any = {
+    Hit: 0,
+    Wound: 0,
+    Save: 0,
+    FnP: 7,
+    Damage: 0,
+    ModAp: 0,
+    SInV: 7,
+  };
+
+  get modifiers(): Modifiers {
+    return this.currentModifiers;
+  }
+
+  setModifiers(newModifiers:Modifiers | any) {
+    /*
+    console.log(`myModifiers: ${this.currentModifiers}`);
+    console.log(`newModifiers: ${newModifiers}`);
+    console.log(`newModifiers.Wound: ${newModifiers.Wound}`);
+    console.log(`newModifiers.Hit: ${newModifiers.Hit}`);
+    console.log(`newModifiers.Sv: ${newModifiers.Save}`);
+    console.log(`newModifiers.FnP: ${newModifiers.FnP}`); */
+    this.currentModifiers = newModifiers;
+    return this.currentModifiers;
+  }
+
+  chooseSv(RegAp: number, Sv: number, SvI: number, { ModAp, Save, SInV }:Modifiers): number {
     let usedSv: number;
-    const usedSvModifier:number = SvModifier;
-    const SvInv = SvI;
-    if ((Sv - Ap) < SvInv) {
-      usedSv = Sv - Ap;
+    const newSinvul = SInV;
+    const usedSvModifier:number = Save;
+    const SvInv = Math.min(newSinvul, SvI);
+    const finalAp = RegAp + ModAp;
+    if ((Sv - finalAp) < SvInv) {
+      usedSv = Sv - finalAp;
     } else {
       usedSv = SvInv;
     }
@@ -83,6 +112,12 @@ export class EpwhammerService {
         case 'D6 + 4':
           estimatedVal = 7.5;
           break;
+        case 'x2':
+          estimatedVal = 4;
+          break;
+        case 'User':
+          estimatedVal = 0;
+          break;
         default:
           estimatedVal = NaN;
           break;
@@ -99,10 +134,14 @@ export class EpwhammerService {
   }
 
   calculateWounds({
-    S, Ap, D, NoS,
+    S, Ap, D, NoS, Range,
   }: Gun, Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers): number | string {
-    let woundOn: number = this.toWound(this.estimateVal(S), Toughness, modifiers.Wound);
-    let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers.Save);
+    let actualStrength: number = this.estimateVal(S);
+    if (Range === 'Melee') {
+      actualStrength += 4;
+    }
+    let woundOn: number = this.toWound(actualStrength, Toughness, modifiers.Wound);
+    let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers);
     let Attacks: string | number = 1;
     if (NoS !== undefined) {
       Attacks = NoS;
@@ -110,12 +149,11 @@ export class EpwhammerService {
     Attacks = this.estimateVal(Attacks);
     woundOn = (7 - woundOn) / 6;
     chosenSv = 1 - (7 - chosenSv) / 6;
-    const thisFnP: number = 1 - (7 - FnP) / 6;
+    const thisFnP: number = 1 - (7 - Math.min(FnP, modifiers.FnP)) / 6;
 
     let result: number | string = this.calculations(Attacks, woundOn, chosenSv) * (this.estimateVal(D) * thisFnP);
 
     result = parseFloat(result.toFixed(2));
-    // eslint-disable-next-line no-restricted-globals
     if (isNaN(result)) {
       result = '';
     }
@@ -126,20 +164,20 @@ export class EpwhammerService {
     S, Ap, D, NoS,
   }: Gun, Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers, wounds: number): number | string {
     let woundOn: number = this.toWound(this.estimateVal(S), Toughness, modifiers.Wound);
-    let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers.Save);
+    let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers);
     let result: number | string = 0;
     let i: number = -1;
     let Attacks: string | number = 1;
     if (NoS !== undefined) {
       Attacks = NoS;
     }
-    const thisFnP: number = 1 - (7 - FnP) / 6;
+    const thisFnP: number = 1 - (7 - Math.min(FnP, modifiers.FnP)) / 6;
     const damage: number = (this.estimateVal(D) * thisFnP);
     woundOn = (7 - woundOn) / 6;
     chosenSv = 1 - (7 - chosenSv) / 6;
 
-    const effectiveDamage: number | string = (this.calculations(Attacks, woundOn, chosenSv));
-    if (!isNaN(effectiveDamage) && typeof (effectiveDamage) === 'number') {
+    const effectiveDamage: number = (this.calculations(Attacks, woundOn, chosenSv));
+    if (!isNaN(effectiveDamage)) {
       if (damage === wounds) {
         result = effectiveDamage;
       } else if (damage > wounds) {
@@ -153,8 +191,6 @@ export class EpwhammerService {
         result = i;
       }
       result = Math.round((parseFloat(result.toFixed(2))));
-    } else {
-      result = '';
     }
 
     if (typeof (S) === 'undefined' || typeof (Ap) === 'undefined' || typeof (D) === 'undefined') {
@@ -170,10 +206,7 @@ export class EpwhammerService {
     for (i; i < gun.length; i += 1) {
       result = this.calculateWounds(gun[i], T, Sv, SvInv, FnP, modifiers);
       if (typeof (result) === 'number') {
-      // eslint-disable-next-line no-restricted-globals
-        if (!isNaN(result)) {
-          total += result;
-        }
+        total += result;
       }
     }
     total /= i;
@@ -188,16 +221,12 @@ export class EpwhammerService {
     for (i; i < gun.length; i += 1) {
       result = this.calculateDeadModels(gun[i], T, Sv, SvInv, FnP, modifiers, wounds);
       if (typeof (result) === 'number') {
-        // eslint-disable-next-line no-restricted-globals
         if (!isNaN(result)) {
           total += result;
         }
       }
     }
     total /= i;
-    if (total < 0) {
-      total = 0;
-    }
     return (parseFloat(total.toFixed(2)));
   }
 }

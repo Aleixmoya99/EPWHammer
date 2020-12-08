@@ -1,7 +1,8 @@
 /* eslint-disable no-empty-function */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Gun } from './home';
 
 @Injectable({
@@ -19,10 +20,13 @@ export class IssueService {
   // eslint-disable-next-line no-unused-vars
   constructor(private http: HttpClient) { }
 
-  allGuns$ = new Subject <Gun[]>()
+  allGuns$ = new BehaviorSubject <Gun[]>([])
 
   getIssues(): Observable <Gun[]> {
-    return this.http.get<Gun[]>(`${this.endpoint}/`);
+    return this.http.get<Gun[]>(`${this.endpoint}/`)
+      .pipe(tap((guns) => {
+        this.allGuns$.next(guns);
+      }));
   }
 
   getIssueById(id: any) {

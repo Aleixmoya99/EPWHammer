@@ -1,12 +1,4 @@
 import { Unit } from './DataUnit';
-import { Modifiers } from './DataModifiers';
-
-export const modifiers: Modifiers = {
-  Wound: 0,
-  Save: 0,
-  Hit: 0,
-  FnP: 0,
-};
 
 export const MEQ: Unit = {
   Toughness: 4,

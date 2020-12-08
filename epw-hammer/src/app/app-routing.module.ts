@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
 import { HomeComponent } from './home/home.component';
 import { VersusMenuComponent } from './versus-menu/versus-menu.component';
 import { VersusCustomMenuComponent } from './versus-custom-menu/versus-custom-menu.component';
@@ -32,6 +34,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    BrowserModule,
+    FormsModule,
     CommonModule,
     RouterModule.forRoot(routes),
   ],

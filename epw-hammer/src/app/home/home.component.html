@@ -1,5 +1,7 @@
 <main>
   <h2>Home</h2>
   <div class="button_cont" ><a class="example_f" href="/versusMenu"><span>Versus</span></a></div>
-  <div class="button_cont" ><a class="example_f" href="/averageChoose"><span>Averages</span></a></div>
+  <button (click)="getInitialModifiers()">Testing get</button>
+  <button (click)="setInitialModifiers()">Testing set</button>
+  <div class="button_cont" (click)="setInitialModifiers()"><a class="example_f" href="/averageChoose"><span>Averages</span></a></div>
 </main>

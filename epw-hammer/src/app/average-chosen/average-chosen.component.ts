@@ -9,8 +9,8 @@ import { IssueService } from '../issue.service';
 import { Gun } from '../home';
 import { Unit } from '../DataUnit';
 import {
-  MEQ, TEQ, GEQ, VEQ, KEQ, modifiers,
-} from '../mock-epwhammer';
+  MEQ, TEQ, GEQ, VEQ, KEQ,
+} from '../mockEpwhammer';
 
 @Component({
   selector: 'app-average-chosen',
@@ -22,7 +22,7 @@ export class AverageChosenComponent implements AfterViewInit {
 
   chart: any;
 
-  actualmodifiers = modifiers;
+  actualmodifiers = this.epwhammerService.currentModifiers;
 
   marineEquivalent = MEQ;
 
@@ -505,48 +505,140 @@ export class AverageChosenComponent implements AfterViewInit {
 
   onSelect(gun: Gun): void {
     this.selectedGun = gun;
-    setTimeout(() => {
-      this.chart.load({
-        columns: [
-          ['Chosen', this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.marineEquivalent.Toughness,
-            this.marineEquivalent.Sv,
-            this.marineEquivalent.SvIn,
-            this.marineEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.terminatorEquivalent.Toughness,
-            this.terminatorEquivalent.Sv,
-            this.terminatorEquivalent.SvIn,
-            this.terminatorEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.guardsmanEquivalent.Toughness,
-            this.guardsmanEquivalent.Sv,
-            this.guardsmanEquivalent.SvIn,
-            this.guardsmanEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.vehicleEquivalent.Toughness,
-            this.vehicleEquivalent.Sv,
-            this.vehicleEquivalent.SvIn,
-            this.vehicleEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.knightEquivalent.Toughness,
-            this.knightEquivalent.Sv,
-            this.knightEquivalent.SvIn,
-            this.knightEquivalent.FnP,
-            this.actualmodifiers,
-          )],
-        ],
-      });
-    }, 500);
+    for (let i = 0; i < 4; i += 1) {
+      if (this.gunProfile(i) !== '' && typeof (this.selectedGun.profile) !== 'undefined') {
+        setTimeout(() => {
+          this.chart.load({
+            columns: [
+              [`profile: ${i}`, this.calculateProfileWounds(
+                this.marineEquivalent,
+                i,
+              ), this.calculateProfileWounds(
+                this.terminatorEquivalent,
+                i,
+              ), this.calculateProfileWounds(
+                this.guardsmanEquivalent,
+                i,
+              ), this.calculateProfileWounds(
+                this.vehicleEquivalent,
+                i,
+              ), this.calculateProfileWounds(
+                this.knightEquivalent,
+                i,
+              ),
+              ],
+            ],
+          });
+        }, 200);
+      } else {
+        setTimeout(() => {
+          this.chart.unload({
+            ids: `profile: ${i}`,
+          });
+        }, 200);
+      }
+    }
+    for (let i = 0; i < 2; i += 1) {
+      let name: string;
+      if (this.getMeltaGunProfile(i) !== '' && typeof (this.selectedGun.melta) !== 'undefined') {
+        if (i === 0) {
+          name = 'No Melta Range';
+        }
+        if (i === 1) {
+          name = 'Melta Range';
+        }
+        setTimeout(() => {
+          this.chart.load({
+            columns: [
+              [`${name}`, this.calculateMeltaWounds(
+                this.marineEquivalent,
+                i,
+              ), this.calculateMeltaWounds(
+                this.terminatorEquivalent,
+                i,
+              ), this.calculateMeltaWounds(
+                this.guardsmanEquivalent,
+                i,
+              ), this.calculateMeltaWounds(
+                this.vehicleEquivalent,
+                i,
+              ), this.calculateMeltaWounds(
+                this.knightEquivalent,
+                i,
+              ),
+              ],
+            ],
+          });
+        }, 200);
+      } else {
+        setTimeout(() => {
+          this.chart.unload({
+            ids: 'No Melta Range',
+          });
+        }, 200);
+        setTimeout(() => {
+          this.chart.unload({
+            ids: 'Melta Range',
+          });
+        }, 200);
+      }
+    }
+    if (typeof (this.selectedGun.S) !== 'undefined') {
+      setTimeout(() => {
+        this.chart.load({
+          columns: [
+            ['Selected', this.calculateBasicWounds(
+              this.marineEquivalent,
+            ), this.calculateBasicWounds(
+              this.terminatorEquivalent,
+            ), this.calculateBasicWounds(
+              this.guardsmanEquivalent,
+            ), this.calculateBasicWounds(
+              this.vehicleEquivalent,
+            ), this.calculateBasicWounds(
+              this.knightEquivalent,
+            )],
+          ],
+        });
+      }, 500);
+      if (typeof (this.selectedGun.Overcharged) !== 'undefined') {
+        setTimeout(() => {
+          this.chart.load({
+            columns: [
+              ['Overcharged', this.calculateOverchargedWounds(
+                this.marineEquivalent,
+              ), this.calculateOverchargedWounds(
+                this.terminatorEquivalent,
+              ), this.calculateOverchargedWounds(
+                this.guardsmanEquivalent,
+              ), this.calculateOverchargedWounds(
+                this.vehicleEquivalent,
+              ), this.calculateOverchargedWounds(
+                this.knightEquivalent,
+              ),
+              ],
+            ],
+          });
+        }, 500);
+      } else {
+        setTimeout(() => {
+          this.chart.unload({
+            ids: 'Overcharged',
+          });
+        }, 600);
+      }
+    } else {
+      setTimeout(() => {
+        this.chart.unload({
+          ids: 'Selected',
+        });
+      }, 300);
+      setTimeout(() => {
+        this.chart.unload({
+          ids: 'Overcharged',
+        });
+      }, 300);
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -557,42 +649,6 @@ export class AverageChosenComponent implements AfterViewInit {
         x: 'x',
         columns: [
           ['x', 'MEQ', 'TEQ', 'GEQ', 'VEQ', 'KEQ'],
-          ['Chosen', this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.marineEquivalent.Toughness,
-            this.marineEquivalent.Sv,
-            this.marineEquivalent.SvIn,
-            this.marineEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.terminatorEquivalent.Toughness,
-            this.terminatorEquivalent.Sv,
-            this.terminatorEquivalent.SvIn,
-            this.terminatorEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.guardsmanEquivalent.Toughness,
-            this.guardsmanEquivalent.Sv,
-            this.guardsmanEquivalent.SvIn,
-            this.guardsmanEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.vehicleEquivalent.Toughness,
-            this.vehicleEquivalent.Sv,
-            this.vehicleEquivalent.SvIn,
-            this.vehicleEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.knightEquivalent.Toughness,
-            this.knightEquivalent.Sv,
-            this.knightEquivalent.SvIn,
-            this.knightEquivalent.FnP,
-            this.actualmodifiers,
-          )],
           ['Average Wounds', this.epwhammerService.factionAverageWounds(
             this.allGuns,
             this.marineEquivalent.Toughness,
@@ -644,47 +700,5 @@ export class AverageChosenComponent implements AfterViewInit {
         show: true,
       },
     });
-    setTimeout(() => {
-      this.chart.load({
-        columns: [
-          ['Chosen', this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.marineEquivalent.Toughness,
-            this.marineEquivalent.Sv,
-            this.marineEquivalent.SvIn,
-            this.marineEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.terminatorEquivalent.Toughness,
-            this.terminatorEquivalent.Sv,
-            this.terminatorEquivalent.SvIn,
-            this.terminatorEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.guardsmanEquivalent.Toughness,
-            this.guardsmanEquivalent.Sv,
-            this.guardsmanEquivalent.SvIn,
-            this.guardsmanEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.vehicleEquivalent.Toughness,
-            this.vehicleEquivalent.Sv,
-            this.vehicleEquivalent.SvIn,
-            this.vehicleEquivalent.FnP,
-            this.actualmodifiers,
-          ), this.epwhammerService.calculateWounds(
-            this.selectedGun,
-            this.knightEquivalent.Toughness,
-            this.knightEquivalent.Sv,
-            this.knightEquivalent.SvIn,
-            this.knightEquivalent.FnP,
-            this.actualmodifiers,
-          )],
-        ],
-      });
-    }, 1000);
   }
 }

@@ -17,6 +17,7 @@ import { VersusOptionsComponent } from './versus-options/versus-options.componen
 import { AverageChosenComponent } from './average-chosen/average-chosen.component';
 import { AverageModifiersComponent } from './average-modifiers/average-modifiers.component';
 import { IssueService } from './issue.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,8 +35,8 @@ import { IssueService } from './issue.service';
     AverageModifiersComponent,
   ],
   imports: [
-    BrowserModule,
     FormsModule,
+    BrowserModule,
     AppRoutingModule,
     HttpClientModule,
   ],

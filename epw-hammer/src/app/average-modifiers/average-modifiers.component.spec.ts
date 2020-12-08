@@ -8,9 +8,9 @@ describe('AverageModifiersComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AverageModifiersComponent ]
+      declarations: [AverageModifiersComponent],
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -21,5 +21,28 @@ describe('AverageModifiersComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+});
+describe('Save Function', () => {
+  let component: AverageModifiersComponent;
+  let fixture: ComponentFixture<AverageModifiersComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [AverageModifiersComponent],
+    })
+      .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AverageModifiersComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should call save()', () => {
+    const spyedFunctionSave = spyOn(component, 'save').and.callThrough();
+    component.save();
+    expect(spyedFunctionSave).toHaveBeenCalled();
   });
 });

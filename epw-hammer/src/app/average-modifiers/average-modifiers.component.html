@@ -1,4 +1,31 @@
 <main>
   <h2>Average Modifiers EPWHammer</h2>
-<div class="button_cont" ><a class="example_f" href="/averageChoose"><span>Confirm</span></a></div>
+  <div>
+    <div>
+      <label>
+        To hit modifier ({{actualModifiers.Hit}})
+        <input type="text" [(ngModel)]='actualModifiers.Hit'/>
+      </label>
+    </div>
+    <div>
+      <label>
+        To wound modifier ({{actualModifiers.Wound}})
+        <input type="text" [(ngModel)]='actualModifiers.Wound'/>
+      </label>
+    </div>
+    <div>
+      <label>
+        To save modifier ({{actualModifiers.Save}})
+        <input type="text" [(ngModel)]='actualModifiers.Save'/>
+      </label>
+    </div>
+    <div>
+      <label>
+        Feel No Pain modifier ({{actualModifiers.FnP}})
+        <input type="text" [(ngModel)]='actualModifiers.FnP'/>
+      </label>
+    </div>
+  </div>
+  <button (click)="save()"> try it</button>
+<div class="button_cont" (click)="save()"><a class="example_f" href="/averageChoose"><span>Confirm</span></a></div>
 </main>
