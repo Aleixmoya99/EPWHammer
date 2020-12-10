@@ -6,4 +6,8 @@ export interface Modifiers {
     ModAp: number;
     SInV: number,
     FnP: number,
+    rerollHits: string,
+    rerollWounds: string,
+    rerollSaved: string,
+    rerollDamage: string,
 }

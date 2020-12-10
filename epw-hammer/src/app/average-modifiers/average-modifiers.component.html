@@ -25,7 +25,68 @@
         <input type="text" [(ngModel)]='actualModifiers.FnP'/>
       </label>
     </div>
+    <div>
+      <label>
+        Damage ({{actualModifiers.Damage}})
+        <input type="text" [(ngModel)]='actualModifiers.Damage'/>
+      </label>
+    </div>
+    <div>
+      <label>
+        Ap Modificator ({{actualModifiers.ModAp}})
+        <input type="text" [(ngModel)]='actualModifiers.ModAp'/>
+      </label>
+    </div>
+    <div>
+      <label>
+        Invulnerable Save ({{actualModifiers.SInV}})
+        <input type="text" [(ngModel)]='actualModifiers.SInV'/>
+      </label>
+    </div>
+    <div>
+      <label>
+        Reroll Hits ({{actualModifiers.rerollHits}})
+        <input type="text" [(ngModel)]='actualModifiers.rerollHits'/>
+      </label>
+    </div> 
+    <div>
+      <label>
+        Reroll Wounds ({{actualModifiers.rerollWounds}})
+        <input type="text" [(ngModel)]='actualModifiers.rerollHits'/>
+      </label>
+    </div> 
+    <div>
+      <label>
+        Reroll Saved ({{actualModifiers.rerollSaved}})
+        <input type="text" [(ngModel)]='actualModifiers.rerollHits'/>
+      </label>
+    </div> 
+    <div>
+      <label>
+        Reroll Damage ({{actualModifiers.rerollDamage}})
+        <input type="text" [(ngModel)]='actualModifiers.rerollHits'/>
+      </label>
+    </div>    
   </div>
   <button (click)="save()"> try it</button>
 <div class="button_cont" (click)="save()"><a class="example_f" href="/averageChoose"><span>Confirm</span></a></div>
 </main>
+<footer id="myFooter">
+  <div id="mainFooter">
+      <div id="footerText">
+          <p>About</p>
+          <p>Contact</p>
+      </div>
+      <div id="footerText">
+          <p>Basic Rules</p>
+          <p>Features</p>
+      </div>
+      <div id="footerText">
+          <p>News</p>
+          <p>Patches</p>
+      </div>
+  </div>
+  <br>
+  <sub>You can go back to home if you click the logo</sub>
+  <p></p>
+  </footer>

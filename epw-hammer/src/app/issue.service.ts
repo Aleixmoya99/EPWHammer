@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Modifiers } from '../app/DataModifiers';
 import { Gun } from './home';
 
 @Injectable({
@@ -23,14 +23,19 @@ export class IssueService {
   allGuns$ = new BehaviorSubject <Gun[]>([])
 
   getIssues(): Observable <Gun[]> {
-    return this.http.get<Gun[]>(`${this.endpoint}/`)
-      .pipe(tap((guns) => {
-        this.allGuns$.next(guns);
-      }));
+    return this.http.get<Gun[]>(`${this.endpoint}/`);
+  }
+
+  getModifiers(): Observable<Modifiers> {
+    return this.http.get<Modifiers>(`${this.endpoint}/`);
+  }
+
+  updateModifiers(modifiers: Modifiers): Observable<any> {
+    return this.http.put(this.endpoint, modifiers, this.httpOptions);
   }
 
   getIssueById(id: any) {
-    return this.http.get<Gun>(`${this.endpoint}/issues/${id}`);
+    return this.http.get<Gun>(`${this.endpoint}/${id}`);
   }
 
   deleteIssue(id: any) {

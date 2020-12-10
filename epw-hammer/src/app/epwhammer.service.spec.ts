@@ -333,6 +333,10 @@ describe('function Calculate Wounds test', () => {
     Damage: 0,
     ModAp: 0,
     SInV: 7,
+    rerollHits: 'none',
+    rerollWounds: 'none',
+    rerollSaved: 'none',
+    rerollDamage: 'none',
   };
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -627,7 +631,47 @@ describe('function Faction Average Wounds', () => {
   let service: EpwhammerService;
   let serviceSpyCalculateWounds: any;
   let gun: Gun;
-  let modifiers: Modifiers;
+  const guns: Gun[] = [
+    {
+      name: 'Accelerator Autocannon',
+      points: 0,
+      Range: 48,
+      Type: 'Heavy',
+      NoS: 3,
+      S: 7,
+      Ap: -1,
+      D: 2,
+      Ability: '',
+      profile: '',
+      Overcharged: '',
+    },
+    {
+      name: 'Absolvor Bolt Pistol',
+      points: 0,
+      Range: 18,
+      Type: 'Pistol',
+      NoS: 1,
+      S: 5,
+      Ap: -1,
+      D: 2,
+      Ability: '',
+      profile: '',
+      Overcharged: '',
+    },
+  ];
+  const modifiers: Modifiers | any = {
+    Hit: 0,
+    Wound: 0,
+    Save: 0,
+    FnP: 7,
+    Damage: 0,
+    ModAp: 0,
+    SInV: 7,
+    rerollHits: 'none',
+    rerollWounds: 'none',
+    rerollSaved: 'none',
+    rerollDamage: 'none',
+  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -650,6 +694,17 @@ describe('function Faction Average Wounds', () => {
     service.factionAverageWounds([{
       ...gun, S, Ap, NoS, D,
     }], Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save });
+    expect(serviceSpyCalculateWounds).toHaveBeenCalled();
+  });
+  it('test it functions correctly', () => {
+    const Toughness: number = 4;
+    const Sv: number = 4;
+    const SvInv: number = 4;
+    const FnP: number = 7;
+    const Wound: number = 0;
+    const Save: number = 0;
+
+    service.factionAverageWounds(guns, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save });
     expect(serviceSpyCalculateWounds).toHaveBeenCalled();
   });
 });
@@ -718,9 +773,255 @@ describe('function setModifiers', () => {
       Damage: 0,
       ModAp: 0,
       SInV: 0,
+      rerollHits: 'none',
+      rerollWounds: 'none',
+      rerollSaved: 'none',
+      rerollDamage: 'none',
     };
     service.setModifiers(newModifiers);
 
     expect(service.currentModifiers).toEqual(newModifiers);
+  });
+});
+
+describe('determineRerollEffect test', () => {
+  let service: EpwhammerService;
+  const myModifiers: Modifiers = {
+    Hit: 0,
+    Wound: 0,
+    Save: 0,
+    FnP: 7,
+    Damage: 0,
+    ModAp: 0,
+    SInV: 7,
+    rerollHits: 'none',
+    rerollWounds: 'none',
+    rerollSaved: 'none',
+    rerollDamage: 'none',
+  };
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(EpwhammerService);
+  });
+  it('testing reroll of 1s', () => {
+    myModifiers.rerollWounds = '1s';
+    const woundingOn: number = 0.5;
+    const result = service.determineRerollEffect(myModifiers.rerollWounds, woundingOn);
+
+    expect(result).toEqual(0.58);
+  });
+  it('testing no reroll', () => {
+    myModifiers.rerollWounds = 'none';
+    const woundingOn: number = 0.5;
+    const result = service.determineRerollEffect(myModifiers.rerollWounds, woundingOn);
+
+    expect(result).toEqual(0.5);
+  });
+  it('testing reroll all failed', () => {
+    myModifiers.rerollWounds = 'All Failed';
+    const woundingOn: number = 0.5;
+    const result = service.determineRerollEffect(myModifiers.rerollWounds, woundingOn);
+
+    expect(result).toEqual(0.75);
+  });
+  it('testing reroll 6s', () => {
+    myModifiers.rerollWounds = '6s';
+    const woundingOn: number = 0.5;
+    const result = service.determineRerollEffect(myModifiers.rerollWounds, woundingOn);
+
+    expect(result).toEqual(0.42);
+  });
+  it('testing reroll All successfull', () => {
+    myModifiers.rerollWounds = 'All Successful';
+    const woundingOn: number = 0.5;
+    const result = service.determineRerollEffect(myModifiers.rerollWounds, woundingOn);
+
+    expect(result).toEqual(0.25);
+  });
+  it('testing reroll undefined type of reroll', () => {
+    myModifiers.rerollWounds = '<viofdnvo<dco>';
+    const woundingOn: number = 0.5;
+    const result = service.determineRerollEffect(myModifiers.rerollWounds, woundingOn);
+
+    expect(result).toEqual(0.5);
+  });
+});
+
+describe('calculateRerollDamage test', () => {
+  let service: EpwhammerService;
+  const myModifiers: Modifiers = {
+    Hit: 0,
+    Wound: 0,
+    Save: 0,
+    FnP: 7,
+    Damage: 0,
+    ModAp: 0,
+    SInV: 7,
+    rerollHits: 'none',
+    rerollWounds: 'none',
+    rerollSaved: 'none',
+    rerollDamage: 'none',
+  };
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(EpwhammerService);
+  });
+  it('testing reroll of number', () => {
+    myModifiers.rerollDamage = 'Reroll Favorable';
+    const damage: number = 1;
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(1);
+  });
+  it('testing reroll favorable of 1', () => {
+    myModifiers.rerollDamage = 'Reroll Favorable';
+    const damage: string = '1';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(1);
+  });
+  it('testing reroll favorable of D6', () => {
+    myModifiers.rerollDamage = 'Reroll Favorable';
+    const damage: string = 'D6';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(5.25);
+  });
+  it('testing reroll favorable of D3', () => {
+    myModifiers.rerollDamage = 'Reroll Favorable';
+    const damage: string = 'D3';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(3);
+  });
+  it('testing reroll favorable of 2D6', () => {
+    myModifiers.rerollDamage = 'Reroll Favorable';
+    const damage: string = '2D6';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(10.5);
+  });
+  it('testing reroll favorable of 2D3', () => {
+    myModifiers.rerollDamage = 'Reroll Favorable';
+    const damage: string = '2D3';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(6);
+  });
+  it('testing reroll favorable of D3 + 3', () => {
+    myModifiers.rerollDamage = 'Reroll Favorable';
+    const damage: string = 'D3 + 3';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(6);
+  });
+  it('testing reroll favorable of D6 + 2', () => {
+    myModifiers.rerollDamage = 'Reroll Favorable';
+    const damage: string = 'D6 + 2';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(7.25);
+  });
+  it('testing reroll favorable of D6 + 4', () => {
+    myModifiers.rerollDamage = 'Reroll Favorable';
+    const damage: string = 'D6 + 4';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(9.25);
+  });
+  it('testing reroll favorable of undefined', () => {
+    myModifiers.rerollDamage = 'Reroll Favorable';
+    const damage: string = 'asvavmava';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(0);
+  });
+  it('testing reroll Disfavorable of 1', () => {
+    myModifiers.rerollDamage = 'Reroll Disfavorable';
+    const damage: string = '1';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(1);
+  });
+  it('testing reroll Disfavorable of D6', () => {
+    myModifiers.rerollDamage = 'Reroll Disfavorable';
+    const damage: string = 'D6';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(1.75);
+  });
+  it('testing reroll Disfavorable of D3', () => {
+    myModifiers.rerollDamage = 'Reroll Disfavorable';
+    const damage: string = 'D3';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(1);
+  });
+  it('testing reroll Disfavorable of 2D6', () => {
+    myModifiers.rerollDamage = 'Reroll Disfavorable';
+    const damage: string = '2D6';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(3.5);
+  });
+  it('testing reroll Disfavorable of 2D3', () => {
+    myModifiers.rerollDamage = 'Reroll Disfavorable';
+    const damage: string = '2D3';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(2);
+  });
+  it('testing reroll Disfavorable of D3 + 3', () => {
+    myModifiers.rerollDamage = 'Reroll Disfavorable';
+    const damage: string = 'D3 + 3';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(4);
+  });
+  it('testing reroll Disfavorable of D6 + 2', () => {
+    myModifiers.rerollDamage = 'Reroll Disfavorable';
+    const damage: string = 'D6 + 2';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(3.75);
+  });
+  it('testing reroll Disfavorable of D6 + 4', () => {
+    myModifiers.rerollDamage = 'Reroll Disfavorable';
+    const damage: string = 'D6 + 4';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(5.75);
+  });
+  it('testing reroll Disfavorable of undefined', () => {
+    myModifiers.rerollDamage = 'Reroll Disfavorable';
+    const damage: string = 'asvavmava';
+    const result = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(0);
+  });
+  it('testing estimateVal is Called', () => {
+    myModifiers.rerollDamage = 'none';
+    const serviceSpyConfirmSpy: any = spyOn(service, 'estimateVal').and.callThrough();
+    const damage: string = '1';
+
+    service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(serviceSpyConfirmSpy).toHaveBeenCalled();
+  });
+  it('testing reroll "none" of 1', () => {
+    myModifiers.rerollDamage = 'none';
+    const damage: string = '1';
+
+    const result:number = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(1);
+  });
+  it('testing reroll "undefined" of damage', () => {
+    myModifiers.rerollDamage = 'asdvavW';
+    const damage: string = '1';
+
+    const result:number = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
+
+    expect(result).toEqual(1);
   });
 });

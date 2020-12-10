@@ -35,7 +35,7 @@ h2 {
     margin-bottom: 0.5%;
   }
   .example_f {
-    --button-bg: linear-gradient(to right, #67b26b, #4ca2cb);
+    --button-bg: linear-gradient(to right, #5e9dce, #83b5df);
     display: inline-block;
     border-radius: 4px;
     background: var(--button-bg) !important;

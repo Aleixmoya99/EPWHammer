@@ -49,6 +49,10 @@ describe('test get and set', () => {
       Damage: 0,
       ModAp: 0,
       SInV: 7,
+      rerollHits: 'none',
+      rerollWounds: 'none',
+      rerollSaved: 'none',
+      rerollDamage: 'none',
     };
     const getInitialModifiers = component.getInitialModifiers();
     expect(getInitialModifiers).toEqual(mockInitialModifiers);
@@ -62,6 +66,10 @@ describe('test get and set', () => {
       Damage: 0,
       ModAp: 0,
       SInV: 7,
+      rerollHits: 'none',
+      rerollWounds: 'none',
+      rerollSaved: 'none',
+      rerollDamage: 'none',
     };
     const setInitialModifiers = component.setInitialModifiers();
     expect(setInitialModifiers).toEqual(initialModifiers);

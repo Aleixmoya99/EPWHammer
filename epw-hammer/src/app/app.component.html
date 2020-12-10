@@ -1,28 +1,15 @@
+<body>
 <header>
-    <a routerLink="home" id="imageLogo"><span style="margin-top: 10px"><img src="https://www.mathhammer8thed.com/static/mathhammer-logo-no-text.png"></span></a>
-    <div id="titleText">
-        <a routerLink="home"><span><h1>{{title}}</h1></span></a>
-        <sub class="subtitle">{{subtitle}}</sub>  
+    <div id="headerItems">
+        <a routerLink="home" id="imageLogo"><span style="margin-top: 10px"><img src="https://www.mathhammer8thed.com/static/mathhammer-logo-no-text.png"></span></a>
+        <div id="titleText">
+            <a routerLink="home"><span><h1>{{title}}</h1></span></a>
+            <sub class="subtitle">{{subtitle}}</sub>  
+        </div>
     </div>
 </header>
 <main>
     <router-outlet></router-outlet>
 </main>
-<footer>
-    <div id="mainFooter">
-        <div id="footerText">
-            <p>About</p>
-            <p>Contact</p>
-        </div>
-        <div id="footerText">
-            <p>Basic Rules</p>
-            <p>Features</p>
-        </div>
-        <div id="footerText">
-            <p>News</p>
-            <p>Patches</p>
-        </div>
-    </div>
-    <br>
-    <sub>You can go back to home if you click the logo</sub>
-</footer>
+
+</body>

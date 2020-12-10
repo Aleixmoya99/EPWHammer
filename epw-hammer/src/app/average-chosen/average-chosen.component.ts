@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-unused-vars */
 /* eslint-disable guard-for-in */
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as c3 from 'c3';
 import { EpwhammerService } from '../epwhammer.service';
@@ -116,8 +116,8 @@ export class AverageChosenComponent implements AfterViewInit {
   calculateOverchargedWounds(Equivalent: Unit) {
     let total: number | string = '';
     const overchargedProfile = this.selectedGun.Overcharged;
-    if (typeof (overchargedProfile) !== 'undefined') {
-      const { S, Ap, D } = this.selectedGun.Overcharged;
+    if (typeof (overchargedProfile) !== 'undefined' && (overchargedProfile) !== '') {
+      const { S, Ap, D } = overchargedProfile;
       const result = this.epwhammerService.calculateWounds(
         {
           ...this.selectedGun, S, Ap, D,
@@ -128,7 +128,7 @@ export class AverageChosenComponent implements AfterViewInit {
         Equivalent.FnP,
         this.actualmodifiers,
       );
-      if (typeof (result) === 'undefined' || result === 0) {
+      if (result === 0) {
         total = '';
       } else {
         total = result;
@@ -487,7 +487,7 @@ export class AverageChosenComponent implements AfterViewInit {
     return result;
   }
 
-  constructor(public epwhammerService: EpwhammerService, private issueService :IssueService) {
+  constructor(@Optional() public epwhammerService: EpwhammerService, @Optional() public issueService :IssueService) {
     this.selectedGun = {
       name: '',
       Range: '',

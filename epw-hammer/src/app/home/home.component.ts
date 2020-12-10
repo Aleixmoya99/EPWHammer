@@ -20,6 +20,10 @@ export class HomeComponent {
     Damage: 0,
     ModAp: 0,
     SInV: 7,
+    rerollHits: 'none',
+    rerollWounds: 'none',
+    rerollSaved: 'none',
+    rerollDamage: 'none',
   };
 
   getInitialModifiers() {

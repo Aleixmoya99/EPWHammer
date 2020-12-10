@@ -1,16 +1,19 @@
-main   {
+main {
   margin-top: 3%;
   padding: 1%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: #f7f7f7;
+  align-items: center;  
+
 }
 .button_cont{
     margin-bottom: 3%;
 }
+#title{
+  color: #c1e4ff
+}
 .example_f {
-  --button-bg: linear-gradient(to right, #67b26b, #4ca2cb);
+  --button-bg: linear-gradient(to right, #5e9dce, #83b5df);
   display: inline-block;
   border-radius: 4px;
   background: var(--button-bg) !important;
@@ -44,12 +47,22 @@ main   {
   opacity: 1;
   right: 0;
 }
+table{
+  border-radius: 5px;
+  background-color: #f7f7f7d2;
+}
 #allweaponTable{
   overflow-y:scroll;
   height:200px;
   display:block;
 }
+#chart{
+  border-radius: 5px;
+  background-color: #f7f7f7d2;
+}
 table {
+  color: black;
+
   empty-cells: hide;
  }
 #allweaponTable{
@@ -71,15 +84,15 @@ th{
   padding: 8px;
 }
 
-#allweaponTable tr:nth-child(even){background-color: #5ed462a4;}
+#allweaponTable tr:nth-child(even){background-color: #83b6df94;}
 
-#allweaponTable tr:hover {background-color: #67ad6a8c;}
+#allweaponTable tr:hover {background-color: #83b5df;}
 
 #allweaponTable th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
-  background-color: #4CAF50;
+  background-color: #5e9dce;
   color: white;
   position: sticky;
   top: 0;
