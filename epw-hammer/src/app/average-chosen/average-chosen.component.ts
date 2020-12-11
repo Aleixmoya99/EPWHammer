@@ -4,6 +4,9 @@
 import { Component, AfterViewInit, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as c3 from 'c3';
+import {
+  MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { EpwhammerService } from '../epwhammer.service';
 import { IssueService } from '../issue.service';
 import { Gun } from '../home';
@@ -11,6 +14,7 @@ import { Unit } from '../DataUnit';
 import {
   MEQ, TEQ, GEQ, VEQ, KEQ,
 } from '../mockEpwhammer';
+import { AverageModifiersComponent } from '../average-modifiers/average-modifiers.component';
 
 @Component({
   selector: 'app-average-chosen',
@@ -487,7 +491,11 @@ export class AverageChosenComponent implements AfterViewInit {
     return result;
   }
 
-  constructor(@Optional() public epwhammerService: EpwhammerService, @Optional() public issueService :IssueService) {
+  constructor(
+    @Optional() public epwhammerService: EpwhammerService,
+    @Optional() public issueService :IssueService,
+    public matDialog: MatDialog,
+  ) {
     this.selectedGun = {
       name: '',
       Range: '',
@@ -501,6 +509,15 @@ export class AverageChosenComponent implements AfterViewInit {
       profile: '',
       points: '',
     };
+  }
+
+  openModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.id = 'AverageModifiersComponent';
+    dialogConfig.height = '500px';
+    dialogConfig.width = '700px';
+    const modalDialog = this.matDialog.open(AverageModifiersComponent, dialogConfig);
   }
 
   onSelect(gun: Gun): void {

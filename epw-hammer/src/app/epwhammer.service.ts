@@ -1,20 +1,13 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Gun } from './home';
 import { Modifiers } from './DataModifiers';
-import { IssueService } from './issue.service';
 @Injectable({
   providedIn: 'root',
 })
 
 export class EpwhammerService {
-  // eslint-disable-next-line no-unused-vars
-  // constructor(public issueService: IssueService) { }
-
-  // Mods$: Observable <Modifiers> = this.issueService.getModifiers();
-
   currentModifiers: Modifiers | any = {
     Hit: 0,
     Wound: 0,
@@ -34,13 +27,6 @@ export class EpwhammerService {
   }
 
   setModifiers(newModifiers:Modifiers | any) {
-    /*
-    console.log(`myModifiers: ${this.currentModifiers}`);
-    console.log(`newModifiers: ${newModifiers}`);
-    console.log(`newModifiers.Wound: ${newModifiers.Wound}`);
-    console.log(`newModifiers.Hit: ${newModifiers.Hit}`);
-    console.log(`newModifiers.Sv: ${newModifiers.Save}`);
-    console.log(`newModifiers.FnP: ${newModifiers.FnP}`); */
     this.currentModifiers = newModifiers;
     return this.currentModifiers;
   }

@@ -26,6 +26,7 @@ export class IssueService {
     return this.http.get<Gun[]>(`${this.endpoint}/`);
   }
 
+  /*
   getModifiers(): Observable<Modifiers> {
     return this.http.get<Modifiers>(`${this.endpoint}/`);
   }
@@ -33,6 +34,8 @@ export class IssueService {
   updateModifiers(modifiers: Modifiers): Observable<any> {
     return this.http.put(this.endpoint, modifiers, this.httpOptions);
   }
+
+  */
 
   getIssueById(id: any) {
     return this.http.get<Gun>(`${this.endpoint}/${id}`);

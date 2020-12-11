@@ -12,5 +12,5 @@ export class AppComponent {
 
   title = 'EPWHammer';
 
-  subtitle = 'The App for Effective Warhammer 40k Players'
+  subtitle = 'Roll no Longer!'
 }

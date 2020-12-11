@@ -1,9 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 import { HomeComponent } from './home/home.component';
 import { VersusMenuComponent } from './versus-menu/versus-menu.component';
 import { VersusCustomMenuComponent } from './versus-custom-menu/versus-custom-menu.component';
@@ -15,8 +21,9 @@ import { VersusOutputComponent } from './versus-output/versus-output.component';
 import { VersusModifiersComponent } from './versus-modifiers/versus-modifiers.component';
 import { VersusOptionsComponent } from './versus-options/versus-options.component';
 import { AverageChosenComponent } from './average-chosen/average-chosen.component';
-import { AverageModifiersComponent } from './average-modifiers/average-modifiers.component';
 import { IssueService } from './issue.service';
+
+import { AverageModifiersComponent } from './average-modifiers/average-modifiers.component';
 
 @NgModule({
   declarations: [
@@ -39,8 +46,12 @@ import { IssueService } from './issue.service';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatDialogModule,
   ],
   providers: [IssueService],
   bootstrap: [AppComponent],
+  entryComponents: [AverageModifiersComponent],
 })
 export class AppModule { }
