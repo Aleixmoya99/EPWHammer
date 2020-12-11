@@ -2,22 +2,22 @@
   <h2 id="title">Average Chosen EPWHammer</h2>
   <table id="allweaponTable">
     <tr>
-      <th>Name</th>
+      <th id="gun name">Name</th>
     </tr>
     <tr *ngFor="let gun of guns$ | async" (click)="onSelect(gun)">
       <td>{{gun.name}}</td>
     </tr>
   </table>
 <table id="selctedweaponTable"> 
+  <caption style="display: none;">selected weapon table</caption>
   <tr> 
-    <th>Name</th> 
-    <th>Range (inches)</th> 
-    <th>Type</th> 
-    <th>Strength</th> 
-    <th>AP</th> 
-    <th>Damage</th> 
-    <th>Ability</th> 
-    <th>Cost</th>
+    <th id=" selected gun name">Name</th> 
+    <th id=" selected gun range">Range (inches)</th> 
+    <th id=" selected gun Type">Type</th> 
+    <th id=" selected gun Strength">Strength</th> 
+    <th id=" selected gun Ap">AP</th> 
+    <th id=" selected gun Damage">Damage</th> 
+    <th id=" selected gun Ability">Ability</th> 
   </tr> 
   <tr> 
     <td><span>{{name}}</span></td>
@@ -27,7 +27,6 @@
     <td><span>{{armourPenetration}}</span></td>
     <td><span>{{damage}}</span></td>
     <td><span>{{ability}}</span></td>
-    <td><span>{{points}}</span></td>
   </tr>
   <tr> 
     <td><span>{{overcharged}}</span></td>
@@ -93,13 +92,14 @@
   </tr>
 </table>
 <table id="selctedweaponTable">
+  <caption style="display: none;">selected weapon table of equivalents</caption>
   <tr>
-    <th></th>
-    <th>MEQ</th>
-    <th>TEQ</th>
-    <th>GEQ</th>
-    <th>VEQ</th>
-    <th>KEQ</th>
+    <th id="empty"></th>
+    <th id="Meq">MEQ</th>
+    <th id="Teq">TEQ</th>
+    <th id="Geq">GEQ</th>
+    <th id="Veq">VEQ</th>
+    <th id="Keq">KEQ</th>
   </tr>
   <tr>
     <td id="rowTitle">Wounds done</td>

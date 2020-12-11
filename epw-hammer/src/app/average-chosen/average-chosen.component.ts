@@ -38,6 +38,8 @@ export class AverageChosenComponent implements AfterViewInit {
 
   knightEquivalent = KEQ;
 
+  allProfilesUsed: string[] = [];
+
   guns$: Observable <Gun[]> = this.issueService.getIssues();
 
   allGuns: Gun[] = this.getArray();
@@ -524,6 +526,7 @@ export class AverageChosenComponent implements AfterViewInit {
     this.selectedGun = gun;
     for (let i = 0; i < 4; i += 1) {
       if (this.gunProfile(i) !== '' && typeof (this.selectedGun.profile) !== 'undefined') {
+        this.allProfilesUsed.push(this.gunProfile(i));
         setTimeout(() => {
           this.chart.load({
             columns: [
