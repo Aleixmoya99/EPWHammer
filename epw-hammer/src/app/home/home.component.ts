@@ -1,8 +1,12 @@
 /* eslint-disable no-empty-function */
 /* eslint-disable no-unused-vars */
 import { Component } from '@angular/core';
+import {
+  MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { Modifiers } from '../DataModifiers';
 import { EpwhammerService } from '../epwhammer.service';
+import { PopUpChoseAverageComponent } from '../pop-up-chose-average/pop-up-chose-average.component';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +14,7 @@ import { EpwhammerService } from '../epwhammer.service';
   styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {
-  constructor(public epwhammerService:EpwhammerService) { }
+  constructor(public epwhammerService:EpwhammerService, public matDialog: MatDialog) { }
 
   initialModifiers: Modifiers = {
     Hit: 0,
@@ -25,6 +29,15 @@ export class HomeComponent {
     rerollSaved: 'none',
     rerollDamage: 'none',
   };
+
+  openModal() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = false;
+    dialogConfig.id = 'AverageModifiersComponent';
+    dialogConfig.height = '500px';
+    dialogConfig.width = '700px';
+    const modalDialog = this.matDialog.open(PopUpChoseAverageComponent, dialogConfig);
+  }
 
   getInitialModifiers() {
     return this.epwhammerService.modifiers;

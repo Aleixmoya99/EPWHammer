@@ -1,0 +1,14 @@
+<h1>Choose Average</h1>
+<main>
+    <p>
+        <select [(ngModel)]="factions" (change) = "setDropDownValue()">
+          <option [value]="item" *ngFor="let item of factionList" [ngValue]="item">{{item}}</option>
+        </select>
+      </p>
+</main>
+<footer id="dialog-footer">
+    <div id="footer-row1">
+      <button mat-raised-button id="dialog-action-button" (click)="actionFunction()"><a [routerLink]="'/averageChoose'">Confirm</a></button>
+      <button mat-raised-button id="dialog-cancel-button" (click)="closeModal()">Go Back</button>
+    </div>
+</footer>

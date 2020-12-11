@@ -1,13 +1,13 @@
 const { Router } = require('express');
 const WargearController = require('../controllers/mainController.js');
 
-function myRouter(Wargear) {
+function myRouter(MarinesWargear, HarlequinWargear) {
   const router = Router();
+  const gunController = WargearController(MarinesWargear, HarlequinWargear);
 
-  const gun = WargearController(Wargear);
-
-  router.route('/')
-    .get(gun.getMethod);
+  router.route('/:gunModel')
+    .all(gunController.allMethod)
+    .get(gunController.getMethod);
 
   return router;
 }

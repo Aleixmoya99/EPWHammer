@@ -4,22 +4,22 @@
     <tr>
       <th id="gun name">Name</th>
     </tr>
-    <tr *ngFor="let gun of guns$ | async" (click)="onSelect(gun)">
+    <tr *ngFor="let gun of gunList" (click)="onSelect(gun)">
       <td>{{gun.name}}</td>
     </tr>
   </table>
-<table id="selctedweaponTable"> 
+<table id="selctedweaponTable">
   <caption style="display: none;">selected weapon table</caption>
-  <tr> 
-    <th id=" selected gun name">Name</th> 
-    <th id=" selected gun range">Range (inches)</th> 
-    <th id=" selected gun Type">Type</th> 
-    <th id=" selected gun Strength">Strength</th> 
-    <th id=" selected gun Ap">AP</th> 
-    <th id=" selected gun Damage">Damage</th> 
-    <th id=" selected gun Ability">Ability</th> 
-  </tr> 
-  <tr> 
+  <tr>
+    <th id=" selected gun name">Name</th>
+    <th id=" selected gun range">Range (inches)</th>
+    <th id=" selected gun Type">Type</th>
+    <th id=" selected gun Strength">Strength</th>
+    <th id=" selected gun Ap">AP</th>
+    <th id=" selected gun Damage">Damage</th>
+    <th id=" selected gun Ability">Ability</th>
+  </tr>
+  <tr>
     <td><span>{{name}}</span></td>
     <td><span>{{range}}</span></td>
     <td><span>{{type}} {{nos}}</span></td>
@@ -28,7 +28,7 @@
     <td><span>{{damage}}</span></td>
     <td><span>{{ability}}</span></td>
   </tr>
-  <tr> 
+  <tr>
     <td><span>{{overcharged}}</span></td>
     <td></td>
     <td></td>
@@ -38,7 +38,7 @@
     <td><span>{{overchargedAbility}}</span></td>
     <td></td>
   </tr>
-  <tr> 
+  <tr>
     <td><span>{{gunProfile(0)}}</span></td>
     <td><span>{{gunProfileRange(0)}}</span></td>
     <td><span>{{gunProfileType(0)}}{{gunProfileNoS(0)}}</span></td>
@@ -47,7 +47,7 @@
     <td><span>{{gunProfileDamage(0)}}</span></td>
     <td><span>{{gunProfileAbility(0)}}</span></td>
   </tr>
-  <tr> 
+  <tr>
     <td><span>{{gunProfile(1)}}</span></td>
     <td><span>{{gunProfileRange(1)}}</span></td>
     <td><span>{{gunProfileType(1)}}{{gunProfileNoS(1)}}</span></td>
@@ -56,7 +56,7 @@
     <td><span>{{gunProfileDamage(1)}}</span></td>
     <td><span>{{gunProfileAbility(1)}}</span></td>
   </tr>
-  <tr> 
+  <tr>
     <td><span>{{gunProfile(2)}}</span></td>
     <td><span>{{gunProfileRange(2)}}</span></td>
     <td><span>{{gunProfileType(2)}}{{gunProfileNoS(2)}}</span></td>
@@ -65,7 +65,7 @@
     <td><span>{{gunProfileDamage(2)}}</span></td>
     <td><span>{{gunProfileAbility(2)}}</span></td>
   </tr>
-  <tr> 
+  <tr>
     <td><span>{{gunProfile(3)}}</span></td>
     <td><span>{{gunProfileRange(3)}}</span></td>
     <td><span>{{gunProfileType(3)}}{{gunProfileNoS(3)}}</span></td>
@@ -156,7 +156,7 @@
     <td><span>{{calculateMeltaWounds(guardsmanEquivalent, 0)}}</span></td>
     <td><span>{{calculateMeltaWounds(vehicleEquivalent, 0)}}</span></td>
     <td><span>{{calculateMeltaWounds(knightEquivalent, 0)}}</span></td>
-  </tr> 
+  </tr>
   <tr>
     <td id="rowTitle"><span>{{getMeltaGunProfile(1) ? getMeltaGunProfile(1) : ''}}</span></td>
     <td><span>{{calculateMeltaWounds(marineEquivalent, 1)}}</span></td>
@@ -220,7 +220,7 @@
     <td><span>{{calculateMeltaDead(guardsmanEquivalent, 0)}}</span></td>
     <td><span>{{calculateMeltaDead(vehicleEquivalent, 0)}}</span></td>
     <td><span>{{calculateMeltaDead(knightEquivalent, 0)}}</span></td>
-  </tr> 
+  </tr>
   <tr>
     <td id="rowTitle"><span>{{getMeltaGunProfile(1) ? getMeltaGunProfile(1) : ''}}</span></td>
     <td><span>{{calculateMeltaDead(marineEquivalent, 1)}}</span></td>

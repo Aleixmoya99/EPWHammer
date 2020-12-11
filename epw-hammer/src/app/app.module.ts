@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-
+import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -24,6 +24,7 @@ import { AverageChosenComponent } from './average-chosen/average-chosen.componen
 import { IssueService } from './issue.service';
 
 import { AverageModifiersComponent } from './average-modifiers/average-modifiers.component';
+import { PopUpChoseAverageComponent } from './pop-up-chose-average/pop-up-chose-average.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { AverageModifiersComponent } from './average-modifiers/average-modifiers
     VersusOptionsComponent,
     AverageChosenComponent,
     AverageModifiersComponent,
+    PopUpChoseAverageComponent,
   ],
   imports: [
     FormsModule,
@@ -49,6 +51,7 @@ import { AverageModifiersComponent } from './average-modifiers/average-modifiers
     BrowserAnimationsModule,
     MatButtonModule,
     MatDialogModule,
+    RouterModule,
   ],
   providers: [IssueService],
   bootstrap: [AppComponent],

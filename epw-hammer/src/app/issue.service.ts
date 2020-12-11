@@ -1,7 +1,7 @@
 /* eslint-disable no-empty-function */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Gun } from './home';
 
 @Injectable({
@@ -19,22 +19,21 @@ export class IssueService {
   // eslint-disable-next-line no-unused-vars
   constructor(private http: HttpClient) { }
 
-  allGuns$ = new BehaviorSubject <Gun[]>([])
+  guns$!: Observable<Gun[]>
 
-  getIssues(): Observable <Gun[]> {
-    return this.http.get<Gun[]>(`${this.endpoint}/`);
+  selectedFaction:string=''
+
+  getSelectedFaction() {
+    return this.selectedFaction;
   }
 
-  /*
-  getModifiers(): Observable<Modifiers> {
-    return this.http.get<Modifiers>(`${this.endpoint}/`);
+  setSelectedFaction(value:string) {
+    this.selectedFaction = value;
   }
 
-  updateModifiers(modifiers: Modifiers): Observable<any> {
-    return this.http.put(this.endpoint, modifiers, this.httpOptions);
+  getIssues(gunModel:string = 'Astartes'): Observable<Gun[]> {
+    return this.http.get<Gun[]>(`${this.endpoint}/${gunModel}`);
   }
-
-  */
 
   getIssueById(id: any) {
     return this.http.get<Gun>(`${this.endpoint}/${id}`);

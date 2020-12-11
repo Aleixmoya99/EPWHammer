@@ -1,12 +1,11 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterModule } from '@angular/router';
 import { EpwhammerService } from '../epwhammer.service';
 import { IssueService } from '../issue.service';
 import { AverageChosenComponent } from './average-chosen.component';
-import { Gun } from '../home';
 
 describe('AverageChosenComponent', () => {
   let component: AverageChosenComponent;

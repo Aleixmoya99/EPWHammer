@@ -1,7 +1,12 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-unused-vars */
 /* eslint-disable guard-for-in */
-import { Component, AfterViewInit, Optional } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  Optional,
+  OnInit,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import * as c3 from 'c3';
 import {
@@ -21,7 +26,7 @@ import { AverageModifiersComponent } from '../average-modifiers/average-modifier
   templateUrl: './average-chosen.component.html',
   styleUrls: ['./average-chosen.component.css'],
 })
-export class AverageChosenComponent implements AfterViewInit {
+export class AverageChosenComponent implements OnInit, AfterViewInit {
   selectedGun: any;
 
   chart: any;
@@ -40,14 +45,27 @@ export class AverageChosenComponent implements AfterViewInit {
 
   allProfilesUsed: string[] = [];
 
-  guns$: Observable <Gun[]> = this.issueService.getIssues();
+  factionChosen: string = ''
 
-  allGuns: Gun[] = this.getArray();
+  guns$: Gun[] = [];
 
-  getArray(): Gun[] {
-    this.issueService.getIssues().subscribe((allGuns) => { this.allGuns = allGuns; });
-    return this.allGuns;
+  gunList:Gun[]=[]
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.factionChosen = this.issueService.getSelectedFaction();
+      this.issueService.getIssues(this.factionChosen).subscribe((value:any) => {
+        this.gunList = value;
+      });
+    }, 300);
   }
+
+  /*
+  getArray(): Gun[] {
+    this.issueService.getIssues().subscribe((gunList) => { this.gunList = gunList; });
+    return this.gunList;
+  }
+  */
 
   get name() {
     return this.selectedGun.name || '';
@@ -316,7 +334,7 @@ export class AverageChosenComponent implements AfterViewInit {
   factionAverageAllWounds(Equivalent: Unit) {
     let total;
     const result = this.epwhammerService.factionAverageWounds(
-      this.allGuns,
+      this.gunList,
       Equivalent.Toughness,
       Equivalent.Sv,
       Equivalent.SvIn,
@@ -334,7 +352,7 @@ export class AverageChosenComponent implements AfterViewInit {
   factionAverageModelsKilled(Equivalent: Unit) {
     let total;
     const result = this.epwhammerService.factionAverageModelsKilled(
-      this.allGuns,
+      this.gunList,
       Equivalent.Toughness,
       Equivalent.Sv,
       Equivalent.SvIn,
@@ -525,6 +543,46 @@ export class AverageChosenComponent implements AfterViewInit {
   onSelect(gun: Gun): void {
     this.selectedGun = gun;
     for (let i = 0; i < 4; i += 1) {
+      this.chart.load({
+        columns: [
+          ['Average Wounds', this.epwhammerService.factionAverageWounds(
+            this.gunList,
+            this.marineEquivalent.Toughness,
+            this.marineEquivalent.Sv,
+            this.marineEquivalent.SvIn,
+            this.marineEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.factionAverageWounds(
+            this.gunList,
+            this.terminatorEquivalent.Toughness,
+            this.terminatorEquivalent.Sv,
+            this.terminatorEquivalent.SvIn,
+            this.terminatorEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.factionAverageWounds(
+            this.gunList,
+            this.guardsmanEquivalent.Toughness,
+            this.guardsmanEquivalent.Sv,
+            this.guardsmanEquivalent.SvIn,
+            this.guardsmanEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.factionAverageWounds(
+            this.gunList,
+            this.vehicleEquivalent.Toughness,
+            this.vehicleEquivalent.Sv,
+            this.vehicleEquivalent.SvIn,
+            this.vehicleEquivalent.FnP,
+            this.actualmodifiers,
+          ), this.epwhammerService.factionAverageWounds(
+            this.gunList,
+            this.knightEquivalent.Toughness,
+            this.knightEquivalent.Sv,
+            this.knightEquivalent.SvIn,
+            this.knightEquivalent.FnP,
+            this.actualmodifiers,
+          )],
+        ],
+      });
       if (this.gunProfile(i) !== '' && typeof (this.selectedGun.profile) !== 'undefined') {
         this.allProfilesUsed.push(this.gunProfile(i));
         setTimeout(() => {
@@ -670,35 +728,35 @@ export class AverageChosenComponent implements AfterViewInit {
         columns: [
           ['x', 'MEQ', 'TEQ', 'GEQ', 'VEQ', 'KEQ'],
           ['Average Wounds', this.epwhammerService.factionAverageWounds(
-            this.allGuns,
+            this.gunList,
             this.marineEquivalent.Toughness,
             this.marineEquivalent.Sv,
             this.marineEquivalent.SvIn,
             this.marineEquivalent.FnP,
             this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
-            this.allGuns,
+            this.gunList,
             this.terminatorEquivalent.Toughness,
             this.terminatorEquivalent.Sv,
             this.terminatorEquivalent.SvIn,
             this.terminatorEquivalent.FnP,
             this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
-            this.allGuns,
+            this.gunList,
             this.guardsmanEquivalent.Toughness,
             this.guardsmanEquivalent.Sv,
             this.guardsmanEquivalent.SvIn,
             this.guardsmanEquivalent.FnP,
             this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
-            this.allGuns,
+            this.gunList,
             this.vehicleEquivalent.Toughness,
             this.vehicleEquivalent.Sv,
             this.vehicleEquivalent.SvIn,
             this.vehicleEquivalent.FnP,
             this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
-            this.allGuns,
+            this.gunList,
             this.knightEquivalent.Toughness,
             this.knightEquivalent.Sv,
             this.knightEquivalent.SvIn,

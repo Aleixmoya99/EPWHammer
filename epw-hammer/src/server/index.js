@@ -1,15 +1,12 @@
 const express = require('express');
 const path = require('path');
-const debug = require('debug')('app');
-const chalk = require('chalk');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const { connect } = require('mongoose');
 const cors = require('cors');
 const Stats = require('./src/models/main');
-const myRouter = require('./src/routes/mainRouter')(Stats);
 const Harlequins = require('./src/models/harlequins');
-const myModRouter = require('./src/routes/mainRouter')(Harlequins);
+const myRouter = require('./src/routes/mainRouter')(Stats, Harlequins);
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -26,8 +23,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '/public/')));
 
 app.use('/', myRouter);
-app.use('/', myModRouter);
 
 app.listen(port, () => {
-  debug(`Server is running on port ${chalk.blue(port)}`);
+  console.log(`Server is running on port ${port}`);
 });

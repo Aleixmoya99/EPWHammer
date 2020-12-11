@@ -1,15 +1,33 @@
-function WargearController(Gun) {
-  function getMethod({ query: { name } }, res) {
-    const query = name ? {
-      name: new RegExp(`${name}`, 'i'),
-    } : {};
-    Gun.find(query, (errorFind, guns) => ((errorFind)
+function WargearController(MarinesWargear, HarlequinWargear) {
+  function allMethod(req, res, next) {
+    const { gunModel } = req.params;
+    let gun = null;
+    switch (gunModel) {
+      case 'Astartes':
+        gun = MarinesWargear;
+        break;
+      case 'Harlequins':
+        gun = HarlequinWargear;
+        break;
+      default:
+        gun = MarinesWargear;
+        break;
+    }
+    req.gun = gun;
+    next();
+  }
+
+  function getMethod(req, res) {
+    const { gun } = req;
+    const query = {};
+
+    gun.find(query, (errorFind, guns) => ((errorFind)
       ? res.send(errorFind)
       : res.json(guns)));
   }
 
   return {
-    getMethod,
+    getMethod, allMethod,
   };
 }
 
