@@ -1,37 +1,26 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { AverageChosenComponent } from './average-chosen.component';
 import { EpwhammerService } from '../epwhammer.service';
 import { IssueService } from '../issue.service';
-import { AverageChosenComponent } from './average-chosen.component';
 
-describe('AverageChosenComponent', () => {
+fdescribe('AverageChosenComponent getters', () => {
   let component: AverageChosenComponent;
-  let fixture: any;
-  let warhammerService: EpwhammerService;
-  let myService: IssueService;
+  let fixture: ComponentFixture<AverageChosenComponent>;
+  let service: EpwhammerService;
+  let httpClientSpy: { get: jasmine.Spy, post: jasmine.Spy};
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AverageChosenComponent],
+      imports: [HttpClientTestingModule],
       providers: [
-        { provide: HttpClient },
-        { provide: warhammerService, useValue: { calculateWounds: () => {}, factionAverageWounds: () => {} } },
-        { provide: myService, useValue: { getIssues: () => {} } },
-        {
-          provide: EpwhammerService,
-          useValue: {
-            chooseSv: () => {},
-            toWound: () => {},
-            estimateVal: () => {},
-            calculations: () => {},
-            calculateWounds: () => {},
-            calculateDeadModels: () => {},
-          },
-        },
+        IssueService,
+        { provide: MatDialog, useValue: {} },
+        { provide: HttpClient, useValue: httpClientSpy },
       ],
-      imports: [HttpClientTestingModule, RouterModule.forRoot([])],
     })
       .compileComponents();
   });
@@ -41,28 +30,54 @@ describe('AverageChosenComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-  it('should call getArray and return list of guns', () => {
-    spyOn(myService, 'getIssues').and.returnValue((new (Observable)()));
-    component.getArray();
-    expect(myService.getIssues).toHaveBeenCalled();
+
+  it('should get ap 0 correctly', () => {
+    component.selectedGun.Ap = 0;
+    const mockname = component.armourPenetration;
+    expect(mockname).toEqual('0');
   });
-  it('calculateOverchargedWounds', () => {
-    const selectedGun = {
-      Overcharged: {
-        S: 8,
-        Ap: -4,
-        D: 2,
-      },
-    };
-    const Equivalent = {
-      Toughness: 3,
-      W: 2,
-      Sv: 5,
-      SvIn: 7,
-      FnP: 7,
-    };
-    const myTest = spyOn(warhammerService, 'calculateWounds').and.callThrough();
-    component.calculateOverchargedWounds(Equivalent);
-    expect(myTest).toHaveBeenCalled();
+
+  it('should get Points 0 correctly', () => {
+    component.selectedGun.points = 0;
+    const mockname = component.points;
+    expect(mockname).toEqual('0');
+  });
+
+  it('should get Points 12 correctly', () => {
+    component.selectedGun.points = 12;
+    const mockname = component.points;
+    expect(mockname).toEqual(12);
+  });
+
+  it('should get Points undefined correctly', () => {
+    component.selectedGun.points = null;
+    const mockname = component.points;
+    expect(mockname).toEqual('');
+  });
+
+  it('should get Overcharge correctly', () => {
+    component.selectedGun = { Overcharged: {} };
+    const mockname = component.overcharged;
+    expect(mockname).toEqual('Overcharged');
+  });
+
+  fit('should get Overcharge S correctly', () => {
+    component.selectedGun = {};
+    component.selectedGun.Overcharged = {};
+    component.selectedGun.Overcharged.S = 7;
+    const mockname = component.overchargedStrength;
+    expect(mockname).toEqual(7);
+  });
+
+  it('should get Overcharge Ap correctly', () => {
+    component.selectedGun = { Overcharged: { Ap: -4 } };
+    const mockname = component.overchargedAP;
+    expect(mockname).toEqual(-4);
+  });
+
+  it('should get Overcharge D correctly', () => {
+    component.selectedGun = { Overcharged: { D: 2 } };
+    const mockname = component.overchargedD;
+    expect(mockname).toEqual(2);
   });
 });

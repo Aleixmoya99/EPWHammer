@@ -44,4 +44,16 @@ describe('IssueService', () => {
       done();
     });
   });
+  it('test getter', () => {
+    const mockFaction: string = service.getSelectedFaction();
+
+    expect(mockFaction).toEqual('');
+  });
+  it('test setter', () => {
+    const mockFaction: string = 'Harlequins';
+
+    service.setSelectedFaction(mockFaction);
+
+    expect(service.selectedFaction).toEqual(mockFaction);
+  });
 });

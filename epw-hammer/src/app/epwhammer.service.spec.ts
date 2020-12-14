@@ -219,6 +219,13 @@ describe('function estamate Value test', () => {
 
     expect(output).toEqual(1);
   });
+  it('should return 6 when input is 3D3', () => {
+    const val: string = '3D3';
+
+    const output:number = service.estimateVal(val);
+
+    expect(output).toEqual(6);
+  });
   it('should return 3.5', () => {
     const val: string = 'D6';
 
@@ -290,7 +297,6 @@ describe('function Calculations test', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(EpwhammerService);
-    // eslint-disable-next-line no-undef
     serviceSpyConfirmSpy = spyOn(service, 'estimateVal').and.callThrough();
   });
   it('estimateVal to have been called', () => {
@@ -341,11 +347,8 @@ describe('function Calculate Wounds test', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(EpwhammerService);
-    // eslint-disable-next-line no-undef
     serviceSpyToWound = spyOn(service, 'toWound').and.callThrough();
-    // eslint-disable-next-line no-undef
     serviceSpyChooseSv = spyOn(service, 'chooseSv').and.callThrough();
-    // eslint-disable-next-line no-undef
     serviceSpyCalculations = spyOn(service, 'calculations').and.callThrough();
   });
   it('toWound is Called', () => {
@@ -466,11 +469,8 @@ describe('function Calculate Dead test', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(EpwhammerService);
-    // eslint-disable-next-line no-undef
     serviceSpyToWound = spyOn(service, 'toWound').and.callThrough();
-    // eslint-disable-next-line no-undef
     serviceSpyChooseSv = spyOn(service, 'chooseSv').and.callThrough();
-    // eslint-disable-next-line no-undef
     serviceSpyCalculations = spyOn(service, 'calculations').and.callThrough();
   });
   it('toWound is Called', () => {
@@ -676,7 +676,6 @@ describe('function Faction Average Wounds', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(EpwhammerService);
-    // eslint-disable-next-line no-undef
     serviceSpyCalculateWounds = spyOn(service, 'calculateWounds').and.callThrough();
   });
   it('calculateWounds is Called', () => {
@@ -717,7 +716,6 @@ describe('function Faction Average models killed', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(EpwhammerService);
-    // eslint-disable-next-line no-undef
     serviceSpyCalculateWounds = spyOn(service, 'calculateDeadModels').and.callThrough();
   });
   it('factionAverageModelsKilled is Called', () => {
@@ -1023,5 +1021,25 @@ describe('calculateRerollDamage test', () => {
     const result:number = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
 
     expect(result).toEqual(1);
+  });
+  describe('getModifiers', () => {
+    it('test getter', () => {
+      const mockCurrentModifiers: Modifiers | any = {
+        Hit: 0,
+        Wound: 0,
+        Save: 0,
+        FnP: 7,
+        Damage: 0,
+        ModAp: 0,
+        SInV: 7,
+        rerollHits: 'none',
+        rerollWounds: 'none',
+        rerollSaved: 'none',
+        rerollDamage: 'none',
+      };
+      const myModifiers = service.modifiers;
+
+      expect(myModifiers).toEqual(mockCurrentModifiers);
+    });
   });
 });

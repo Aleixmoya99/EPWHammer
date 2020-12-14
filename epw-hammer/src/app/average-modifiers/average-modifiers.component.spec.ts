@@ -1,17 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef } from '@angular/material/dialog';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClient } from '@angular/common/http';
 import { AverageModifiersComponent } from './average-modifiers.component';
 import { EpwhammerService } from '../epwhammer.service';
 import { Modifiers } from '../DataModifiers';
+import { IssueService } from '../issue.service';
 
 describe('Save Function', () => {
   let component: AverageModifiersComponent;
   let fixture: ComponentFixture<AverageModifiersComponent>;
   let service: EpwhammerService;
+  let httpClientSpy: { get: jasmine.Spy, post: jasmine.Spy};
+  const dialogMock = {
+    close: () => { },
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AverageModifiersComponent, MatDialogRef],
-      imports: [],
+      declarations: [AverageModifiersComponent],
+      imports: [HttpClientTestingModule],
+      providers: [
+        IssueService,
+        { provide: MatDialogRef, useValue: dialogMock },
+        { provide: HttpClient, useValue: httpClientSpy },
+      ],
     })
       .compileComponents();
   });
@@ -41,8 +54,12 @@ describe('Save Function', () => {
       rerollSaved: 'none',
       rerollDamage: 'none',
     };
-    const spyedFunctionSet = spyOn(service, 'setModifiers').and.callThrough();
-    const result = component.resetModifiers();
-    expect(result).toHaveBeenCalled();
+    component.resetModifiers();
+    expect(component.epwhammerService.currentModifiers).toEqual(newModifiers);
+  });
+  it('test actionFunction', () => {
+    const spyCloseModal = spyOn(component, 'closeModal').and.callThrough();
+    component.actionFunction();
+    expect(spyCloseModal).toHaveBeenCalled();
   });
 });

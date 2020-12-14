@@ -60,13 +60,6 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     }, 300);
   }
 
-  /*
-  getArray(): Gun[] {
-    this.issueService.getIssues().subscribe((gunList) => { this.gunList = gunList; });
-    return this.gunList;
-  }
-  */
-
   get name() {
     return this.selectedGun.name || '';
   }

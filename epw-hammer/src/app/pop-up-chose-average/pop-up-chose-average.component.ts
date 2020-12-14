@@ -1,9 +1,7 @@
 /* eslint-disable no-empty-function */
 /* eslint-disable no-unused-vars */
 import { Component } from '@angular/core';
-import {
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { IssueService } from '../issue.service';
 
 @Component({

@@ -1,6 +1,10 @@
+/* eslint-disable class-methods-use-this */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Modifiers } from '../DataModifiers';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { of } from 'rxjs';
+import { PopUpChoseAverageComponent } from '../pop-up-chose-average/pop-up-chose-average.component';
 import { HomeComponent } from './home.component';
+import { Modifiers } from '../DataModifiers';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -9,6 +13,8 @@ describe('HomeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [HomeComponent],
+      imports: [MatDialogModule],
+      providers: [{ provide: MatDialog, useValue: { } }],
     })
       .compileComponents();
   });
@@ -22,26 +28,9 @@ describe('HomeComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-});
 
-describe('test get and set', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [HomeComponent],
-    })
-      .compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(HomeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-  it('should call get', () => {
-    const mockInitialModifiers:Modifiers = {
+  it('test getter', () => {
+    const mockInitialModifiers: Modifiers = {
       Hit: 0,
       Wound: 0,
       Save: 0,
@@ -54,14 +43,15 @@ describe('test get and set', () => {
       rerollSaved: 'none',
       rerollDamage: 'none',
     };
-    const getInitialModifiers = component.getInitialModifiers();
-    expect(getInitialModifiers).toEqual(mockInitialModifiers);
+    const myModifiers = component.getInitialModifiers();
+
+    expect(myModifiers).toEqual(mockInitialModifiers);
   });
-  it('should call set', () => {
-    const initialModifiers:Modifiers = {
+  it('test setter', () => {
+    const mockSetModifiers: Modifiers = {
       Hit: 0,
-      Wound: 0,
-      Save: 0,
+      Wound: 1,
+      Save: -1,
       FnP: 7,
       Damage: 0,
       ModAp: 0,
@@ -71,7 +61,9 @@ describe('test get and set', () => {
       rerollSaved: 'none',
       rerollDamage: 'none',
     };
-    const setInitialModifiers = component.setInitialModifiers();
-    expect(setInitialModifiers).toEqual(initialModifiers);
+    component.initialModifiers = mockSetModifiers;
+    const myModifiers = component.setInitialModifiers();
+
+    expect(myModifiers).toEqual(mockSetModifiers);
   });
 });

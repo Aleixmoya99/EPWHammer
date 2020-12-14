@@ -6,5 +6,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./versus-custom-menu.component.css'],
 })
 export class VersusCustomMenuComponent {
-  factions: string[] = ['Adeptus Astartes', 'Harlequins'];
 }
