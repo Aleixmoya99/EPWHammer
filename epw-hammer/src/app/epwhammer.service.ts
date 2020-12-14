@@ -100,6 +100,9 @@ export class EpwhammerService {
         case '2D3':
           estimatedVal = 4;
           break;
+        case '3D3':
+          estimatedVal = 6;
+          break;
         case 'D3 + 3':
           estimatedVal = 5;
           break;

@@ -6,7 +6,8 @@ const { connect } = require('mongoose');
 const cors = require('cors');
 const Stats = require('./src/models/main');
 const Harlequins = require('./src/models/harlequins');
-const myRouter = require('./src/routes/mainRouter')(Stats, Harlequins);
+const Necrons = require('./src/models/necrons');
+const myRouter = require('./src/routes/mainRouter')(Stats, Harlequins, Necrons);
 
 const app = express();
 const port = process.env.PORT || 5000;

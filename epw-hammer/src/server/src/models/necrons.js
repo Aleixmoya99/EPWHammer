@@ -11,11 +11,6 @@ const basicStats = new Schema({
   Ability: String,
 });
 
-const Effects = new Schema({
-  Effect1: { type: basicStats },
-  Effect2: { type: basicStats },
-});
-
 const Stats = new Schema({
   name: String,
   Range: String,
@@ -26,11 +21,15 @@ const Stats = new Schema({
   D: { type: Schema.Types.Mixed },
   Ability: String,
   profile: {
+    Low_Power: { type: basicStats },
+    High_Power: { type: basicStats },
     Dispersed: { type: basicStats },
-    Focused: { type: basicStats },
-    melta: { type: Effects },
+    Focused_Max_Range: { type: basicStats },
+    Focused_Half_Range: { type: basicStats },
+    Reaping_Sweep: { type: basicStats },
+    Entropic_Blow: { type: basicStats },
   },
 
 });
 
-module.exports = model('harlequinwargears', Stats);
+module.exports = model('necronwargears', Stats);

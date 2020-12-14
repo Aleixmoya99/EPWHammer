@@ -1,10 +1,21 @@
-<h1>Choose Average</h1>
+<h1>Faction's Average</h1>
+<h2>Choose Faction</h2>
 <main>
     <p>
         <select [(ngModel)]="factions" (change) = "setDropDownValue()">
           <option [value]="item" *ngFor="let item of factionList" [ngValue]="item">{{item}}</option>
         </select>
       </p>
+
+  <h3>Average Faction shows: </h3>
+    <ul>
+      <li>Average wounds dealt of a single gun</li>
+      <li>Average models killed of a single gun</li>
+      <li>Average wounds dealt by faction standards</li>
+      <li>Average models killed by faction standards</li>
+      <li>Basic Melee strength is considered 4</li>
+    </ul>
+  <h4>All the avereges asume that the hit roll was successfull</h4>
 </main>
 <footer id="dialog-footer">
     <div id="footer-row1">

@@ -1,4 +1,4 @@
-function WargearController(MarinesWargear, HarlequinWargear) {
+function WargearController(MarinesWargear, HarlequinWargear, NecronWargear) {
   function allMethod(req, res, next) {
     const { gunModel } = req.params;
     let gun = null;
@@ -8,6 +8,9 @@ function WargearController(MarinesWargear, HarlequinWargear) {
         break;
       case 'Harlequins':
         gun = HarlequinWargear;
+        break;
+      case 'Necrons':
+        gun = NecronWargear;
         break;
       default:
         gun = MarinesWargear;

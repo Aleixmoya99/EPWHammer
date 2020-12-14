@@ -438,6 +438,9 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
       ? Profile = Object.getOwnPropertyNames(this.selectedGun.profile)[id]
       : Profile = '';
 
+    if (Profile !== '' && typeof (Profile) === 'string') {
+      Profile = Profile.replace('_', ' ');
+    }
     return Profile || '';
   }
 

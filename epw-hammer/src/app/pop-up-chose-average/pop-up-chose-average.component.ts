@@ -14,7 +14,7 @@ import { IssueService } from '../issue.service';
 export class PopUpChoseAverageComponent {
   constructor(public issueService: IssueService, public dialogRef: MatDialogRef<PopUpChoseAverageComponent>) { }
 
-  factionList: string[] = ['Astartes', 'Harlequins']
+  factionList: string[] = ['Astartes', 'Harlequins', 'Necrons']
 
   public chosenFaction: string = this.factionList[0];
 
