@@ -243,15 +243,15 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
         if (typeof (result) !== 'undefined' && result !== 0) {
           total = result;
         }
-      } else {
-        total = '0';
+        if (result === 0) {
+          total = '0';
+        }
       }
     }
     return total;
   }
 
   calculateBasicWounds(Equivalent: Unit) {
-    let total;
     const result = this.epwhammerService.calculateWounds(
       this.selectedGun,
       Equivalent.Toughness,
@@ -260,16 +260,12 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
       Equivalent.FnP,
       this.actualmodifiers,
     );
-    if (result === 0) {
-      total = '0';
-    } else {
-      total = result;
-    }
+    const total = result;
     return total || '';
   }
 
   calculateBasicDead(Equivalent: Unit) {
-    let total;
+    let total: string | number = '';
     const result = this.epwhammerService.calculateDeadModels(
       this.selectedGun,
       Equivalent.Toughness,
@@ -285,10 +281,8 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
       } else {
         total = result;
       }
-    } else {
-      total = '';
     }
-    return total || '';
+    return total;
   }
 
   calculateOverchargedDead(Equivalent: Unit) {
@@ -318,7 +312,6 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
   }
 
   factionAverageAllWounds(Equivalent: Unit) {
-    let total;
     const result = this.epwhammerService.factionAverageWounds(
       this.gunList,
       Equivalent.Toughness,
@@ -327,11 +320,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
       Equivalent.FnP,
       this.actualmodifiers,
     );
-    if (result === 0) {
-      total = '0';
-    } else {
-      total = result;
-    }
+    const total = result;
     return total || '';
   }
 
@@ -363,7 +352,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return Profile || '';
   }
 
-  getMeltaGunRange(id: number): string {
+  getMeltaGunRange(id: number): string | number {
     let Profile;
     this.selectedGun.melta
       // eslint-disable-next-line prefer-destructuring
@@ -381,7 +370,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return Profile || '';
   }
 
-  getMeltaGunNoS(id: number): string {
+  getMeltaGunNoS(id: number): string | number {
     let Profile;
     this.selectedGun.melta
       // eslint-disable-next-line prefer-destructuring
@@ -390,7 +379,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return Profile || '';
   }
 
-  getMeltaGunS(id: number): string {
+  getMeltaGunS(id: number): string | number {
     let Profile;
     this.selectedGun.melta
       // eslint-disable-next-line prefer-destructuring
@@ -399,7 +388,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return Profile || '';
   }
 
-  getMeltaGunAp(id: number): string {
+  getMeltaGunAp(id: number): string | number {
     let Profile;
     this.selectedGun.melta
       // eslint-disable-next-line prefer-destructuring
@@ -430,7 +419,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return Profile || '';
   }
 
-  gunProfileRange(id: number):string {
+  gunProfileRange(id: number):string | number {
     const check: string = this.gunProfile(id);
     let result;
     check === ''
@@ -450,7 +439,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return result;
   }
 
-  gunProfileNoS(id: number):string {
+  gunProfileNoS(id: number):string | number {
     const check: string = this.gunProfile(id);
     let result;
     check === ''
@@ -460,7 +449,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return result;
   }
 
-  gunProfileStrength(id: number):string {
+  gunProfileStrength(id: number):string | number {
     const check: string = this.gunProfile(id);
     let result;
     check === ''
@@ -470,7 +459,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return result;
   }
 
-  gunProfileAp(id: number):string {
+  gunProfileAp(id: number):string | number {
     const check: string = this.gunProfile(id);
     let result;
     check === ''
@@ -480,7 +469,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return result;
   }
 
-  gunProfileDamage(id: number):string {
+  gunProfileDamage(id: number):string | number {
     const check: string = this.gunProfile(id);
     let result;
     check === ''
@@ -529,7 +518,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     const modalDialog = this.matDialog.open(AverageModifiersComponent, dialogConfig);
   }
 
-  onSelect(gun: Gun): void {
+  onSelect(gun: any): void {
     this.selectedGun = gun;
     for (let i = 0; i < 4; i += 1) {
       this.chart.load({
@@ -573,7 +562,6 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
         ],
       });
       if (this.gunProfile(i) !== '' && typeof (this.selectedGun.profile) !== 'undefined') {
-        this.allProfilesUsed.push(this.gunProfile(i));
         setTimeout(() => {
           this.chart.load({
             columns: [

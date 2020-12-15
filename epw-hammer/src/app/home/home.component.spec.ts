@@ -1,10 +1,18 @@
+/* eslint-disable no-undef */
 /* eslint-disable class-methods-use-this */
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { of } from 'rxjs';
-import { PopUpChoseAverageComponent } from '../pop-up-chose-average/pop-up-chose-average.component';
 import { HomeComponent } from './home.component';
 import { Modifiers } from '../DataModifiers';
+
+class dialogMock {
+  open() {
+    return {
+      afterClosed: () => of({}),
+    };
+  }
+}
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -14,7 +22,7 @@ describe('HomeComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [HomeComponent],
       imports: [MatDialogModule],
-      providers: [{ provide: MatDialog, useValue: { } }],
+      providers: [{ provide: MatDialog, useClass: dialogMock }],
     })
       .compileComponents();
   });
@@ -65,5 +73,34 @@ describe('HomeComponent', () => {
     const myModifiers = component.setInitialModifiers();
 
     expect(myModifiers).toEqual(mockSetModifiers);
+  });
+});
+
+describe('Home openModal', () => {
+  let component: HomeComponent;
+  let fixture: ComponentFixture<HomeComponent>;
+  let dialog: any;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [HomeComponent],
+      imports: [MatDialogModule],
+      providers: [{ provide: MatDialog, useClass: dialogMock }],
+    })
+      .compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
+    dialog = TestBed.inject(MatDialog);
+    fixture.detectChanges();
+  });
+  it('should open the dialog', async () => {
+    const spy = spyOn(dialog, 'open').and.callThrough();
+    component.openModal();
+    fixture.detectChanges();
+
+    expect(spy).toHaveBeenCalled();
   });
 });
