@@ -8,6 +8,24 @@
       <td>{{gun.name}}</td>
     </tr>
   </table>
+  <div id="precisions">
+    <div id="precision">
+      <p id='precisionName'>BS</p>
+      <label >
+        <select [(ngModel)]="actualPrecisions[0]">
+          <option [value]="item" *ngFor="let item of possibleBWS" [ngValue]="item">{{item}}</option>
+        </select>
+      </label>
+    </div>
+    <div id="precision">
+      <p id='precisionName'>WS</p>
+      <label>
+        <select [(ngModel)]="actualPrecisions[1]">
+          <option [value]="item" *ngFor="let item of possibleBWS" [ngValue]="item">{{item}}</option>
+        </select>
+      </label>
+    </div>
+  </div>
 <table id="selctedweaponTable">
   <caption style="display: none;">selected weapon table</caption>
   <tr>

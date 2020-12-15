@@ -400,19 +400,19 @@ describe('calculate Wounds', () => {
   it('calculate overcharged wounds overcharged gun is selected', () => {
     component.selectedGun = overchargedGun;
     const total = component.calculateOverchargedWounds(marineEquivalent);
-    expect(total).toEqual(4.02);
+    expect(total).toEqual(2.01);
   });
 
   it('calculate profile wounds profile gun is selected, profile 0', () => {
     component.selectedGun = profileGun;
     const total = component.calculateProfileWounds(marineEquivalent, 0);
-    expect(total).toEqual(0.38);
+    expect(total).toEqual(0.19);
   });
 
   it('calculate melta wounds selected', () => {
     component.selectedGun = meltadGun;
     const total = component.calculateMeltaWounds(marineEquivalent, 0);
-    expect(total).toEqual(5.81);
+    expect(total).toEqual(2.9);
   });
 });
 
@@ -552,7 +552,7 @@ describe('calculate Dead', () => {
   it('calculate melta dead is selected, profile 1', () => {
     component.selectedGun = meltaGun;
     const total = component.calculateMeltaDead(marineEquivalent, 1);
-    expect(total).toEqual(2);
+    expect(total).toEqual(1);
   });
   it('calculate melta dead is selected, amount of killed models is 0', () => {
     component.selectedGun = meltaGun;

@@ -34,7 +34,7 @@ export class HomeComponent {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = false;
     dialogConfig.id = 'AverageModifiersComponent';
-    dialogConfig.height = '500px';
+    dialogConfig.height = '460px';
     dialogConfig.width = '700px';
     const modalDialog = this.matDialog.open(PopUpChoseAverageComponent, dialogConfig);
   }

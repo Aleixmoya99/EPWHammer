@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { TestBed } from '@angular/core/testing';
 import { Gun } from './home';
 import { EpwhammerService } from './epwhammer.service';
@@ -303,25 +304,28 @@ describe('function Calculations test', () => {
     const NoS: number = 3;
     const woundOn: number = 3;
     const chosenSv: number = 3;
+    const hitOn: number = 3;
 
-    service.calculations(NoS, woundOn, chosenSv);
+    service.calculations(NoS, hitOn, woundOn, chosenSv);
     expect(serviceSpyConfirmSpy).toHaveBeenCalled();
   });
   it('all Numbers', () => {
     const NoS: number = 3;
     const woundOn: number = 3;
     const chosenSv: number = 3;
+    const hitOn: number = 3;
 
-    const result = service.calculations(NoS, woundOn, chosenSv);
-    expect(result).toEqual(27);
+    const result = service.calculations(NoS, hitOn, woundOn, chosenSv);
+    expect(result).toEqual(81);
   });
   it('NoS String', () => {
     const NoS: string = 'D3';
     const woundOn: number = 3;
     const chosenSv: number = 3;
+    const hitOn: number = 3;
 
-    const result = service.calculations(NoS, woundOn, chosenSv);
-    expect(result).toEqual(18);
+    const result = service.calculations(NoS, hitOn, woundOn, chosenSv);
+    expect(result).toEqual(54);
   });
 });
 
@@ -356,8 +360,9 @@ describe('function Calculate Wounds test', () => {
     const Sv: number = 4;
     const SvInv: number = 4;
     const FnP: number = 7;
+    const hitingOn: string = '+3';
 
-    service.calculateWounds({ ...gun }, Toughness, Sv, SvInv, FnP, { ...modifiers });
+    service.calculateWounds({ ...gun }, hitingOn, Toughness, Sv, SvInv, FnP, { ...modifiers });
     expect(serviceSpyToWound).toHaveBeenCalled();
   });
   it('chooseSv is Called', () => {
@@ -365,8 +370,9 @@ describe('function Calculate Wounds test', () => {
     const Sv: number = 4;
     const SvInv: number = 4;
     const FnP: number = 7;
+    const hittingOn: string = '+3';
 
-    service.calculateWounds({ ...gun }, Toughness, Sv, SvInv, FnP, { ...modifiers });
+    service.calculateWounds({ ...gun }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers });
     expect(serviceSpyChooseSv).toHaveBeenCalled();
   });
   it('calculations is Called', () => {
@@ -374,11 +380,12 @@ describe('function Calculate Wounds test', () => {
     const Sv: number = 4;
     const SvInv: number = 4;
     const FnP: number = 7;
+    const hittingOn: string = '+3';
 
-    service.calculateWounds({ ...gun }, Toughness, Sv, SvInv, FnP, { ...modifiers });
+    service.calculateWounds({ ...gun }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers });
     expect(serviceSpyCalculations).toHaveBeenCalled();
   });
-  it('calculateWounds should return correctly 0,25 when input is melee', () => {
+  it('calculateWounds should return correctly 0.13 when input is melee', () => {
     const S: number | string = 'User';
     const Range: string = 'Melee';
     const Ap: number = -1;
@@ -390,11 +397,12 @@ describe('function Calculate Wounds test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Save: number = 0;
+    const hittingOn: string = '+3';
 
     const result = service.calculateWounds({
       ...gun, S, Ap, NoS, D, Range,
-    }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save });
-    expect(result).toEqual(0.25);
+    }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save });
+    expect(result).toEqual(0.13);
   });
   it('damage modifier reduces damage taken', () => {
     const S: number | string = 'User';
@@ -408,11 +416,12 @@ describe('function Calculate Wounds test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Damage: number = 1;
+    const hittingOn: string = '+3';
 
     const result = service.calculateWounds({
       ...gun, S, Ap, NoS, D, Range,
-    }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Damage });
-    expect(result).toEqual(0.25);
+    }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Damage });
+    expect(result).toEqual(0.13);
   });
   it('damage modifier reduces damage but no below 0', () => {
     const S: number | string = 'User';
@@ -426,13 +435,14 @@ describe('function Calculate Wounds test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Damage: number = 1;
+    const hittingOn: string = '+3';
 
     const result = service.calculateWounds({
       ...gun, S, Ap, NoS, D, Range,
-    }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Damage });
-    expect(result).toEqual(0.25);
+    }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Damage });
+    expect(result).toEqual(0.13);
   });
-  it('calculateWounds should return 0,25', () => {
+  it('calculateWounds should return 0.13', () => {
     const S: number = 4;
     const Ap: number = -1;
     const NoS: number | string = 1;
@@ -443,11 +453,12 @@ describe('function Calculate Wounds test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Save: number = 0;
+    const hittingOn: string = '+3';
 
     const result = service.calculateWounds({
       ...gun, S, Ap, NoS, D,
-    }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save });
-    expect(result).toEqual(0.25);
+    }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save });
+    expect(result).toEqual(0.13);
   });
 });
 describe('function Calculate Dead test', () => {
@@ -481,8 +492,9 @@ describe('function Calculate Dead test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Save: number = 0;
+    const hittingOn: string = '3+';
 
-    service.calculateDeadModels({ ...gun }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
+    service.calculateDeadModels({ ...gun }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
     expect(serviceSpyToWound).toHaveBeenCalled();
   });
   it('chooseSv is Called', () => {
@@ -493,8 +505,9 @@ describe('function Calculate Dead test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Save: number = 0;
+    const hittingOn: string = '3+';
 
-    service.calculateDeadModels({ ...gun }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
+    service.calculateDeadModels({ ...gun }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
     expect(serviceSpyChooseSv).toHaveBeenCalled();
   });
   it('calculations is Called', () => {
@@ -505,8 +518,9 @@ describe('function Calculate Dead test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Save: number = 0;
+    const hittingOn: string = '3+';
 
-    service.calculateDeadModels({ ...gun }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
+    service.calculateDeadModels({ ...gun }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
     expect(serviceSpyCalculations).toHaveBeenCalled();
   });
   it('calculateDead should return 0 on T = S', () => {
@@ -521,16 +535,17 @@ describe('function Calculate Dead test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Save: number = 0;
+    const hittingOn: string = '3+';
 
     const result = service.calculateDeadModels({
       ...gun, S, Ap, NoS, D,
-    }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
+    }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
     expect(result).toEqual(0);
   });
   it('calculateDead should return 1 on T = S', () => {
     const S: number = 4;
     const Ap: number = -1;
-    const NoS: number | string = 4;
+    const NoS: number | string = 6;
     const D: number | string = 1;
     const Toughness: number = 4;
     const Sv: number = 4;
@@ -539,10 +554,11 @@ describe('function Calculate Dead test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Save: number = 0;
+    const hittingOn: string = '3+';
 
     const result = service.calculateDeadModels({
       ...gun, S, Ap, NoS, D,
-    }, Toughness, Sv, SvInv, FnP, {
+    }, hittingOn, Toughness, Sv, SvInv, FnP, {
       ...modifiers, Wound, Save,
     }, wounds);
     expect(result).toEqual(1);
@@ -559,10 +575,11 @@ describe('function Calculate Dead test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Save: number = 0;
+    const hittingOn: string = '3+';
 
     const result = service.calculateDeadModels({
       ...gun, S, Ap, NoS, D,
-    }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
+    }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
     expect(result).toEqual(0);
   });
 
@@ -578,17 +595,18 @@ describe('function Calculate Dead test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Save: number = 0;
+    const hittingOn: string = '3+';
 
     const result = service.calculateDeadModels({
       ...gun, S, Ap, NoS, D,
-    }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
+    }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
     expect(result).toEqual(0);
   });
 
   it('calculateDead should return 1 T < S', () => {
     const S: number = 5;
     const Ap: number = -1;
-    const NoS: number | string = 3;
+    const NoS: number | string = 5;
     const D: number | string = 1;
     const Toughness: number = 4;
     const Sv: number = 4;
@@ -597,16 +615,17 @@ describe('function Calculate Dead test', () => {
     const FnP: number = 7;
     const Wound: number = 0;
     const Save: number = 0;
+    const hittingOn: string = '3+';
 
     const result = service.calculateDeadModels({
       ...gun, S, Ap, NoS, D,
-    }, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
+    }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
     expect(result).toEqual(1);
   });
   it('calculateDead D > W', () => {
     const S: number = 5;
     const Ap: number = -1;
-    const NoS: number | string = 3;
+    const NoS: number | string = 5;
     const D: number | string = 2;
     const Toughness: number = 4;
     const Sv: number = 4;
@@ -617,10 +636,11 @@ describe('function Calculate Dead test', () => {
     const Save: number = 0;
     const SInV: number = 7;
     const ModAp: number = 0;
+    const hittingOn: string = '3+';
 
     const result = service.calculateDeadModels({
       ...gun, S, Ap, NoS, D,
-    }, Toughness, Sv, SvInv, FnP, {
+    }, hittingOn, Toughness, Sv, SvInv, FnP, {
       ...modifiers, Wound, Save, ModAp, SInV,
     }, wounds);
     expect(result).toEqual(1);
@@ -659,19 +679,6 @@ describe('function Faction Average Wounds', () => {
       Overcharged: '',
     },
   ];
-  const modifiers: Modifiers | any = {
-    Hit: 0,
-    Wound: 0,
-    Save: 0,
-    FnP: 7,
-    Damage: 0,
-    ModAp: 0,
-    SInV: 7,
-    rerollHits: 'none',
-    rerollWounds: 'none',
-    rerollSaved: 'none',
-    rerollDamage: 'none',
-  };
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -687,12 +694,11 @@ describe('function Faction Average Wounds', () => {
     const Sv: number = 4;
     const SvInv: number = 4;
     const FnP: number = 7;
-    const Wound: number = 0;
-    const Save: number = 0;
+    const hittingOn: string[] = ['3+', '3+'];
 
     service.factionAverageWounds([{
       ...gun, S, Ap, NoS, D,
-    }], Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save });
+    }], hittingOn, Toughness, Sv, SvInv, FnP);
     expect(serviceSpyCalculateWounds).toHaveBeenCalled();
   });
   it('test it functions correctly', () => {
@@ -700,10 +706,9 @@ describe('function Faction Average Wounds', () => {
     const Sv: number = 4;
     const SvInv: number = 4;
     const FnP: number = 7;
-    const Wound: number = 0;
-    const Save: number = 0;
+    const hittingOn: string[] = ['3+', '3+'];
 
-    service.factionAverageWounds(guns, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save });
+    service.factionAverageWounds(guns, hittingOn, Toughness, Sv, SvInv, FnP);
     expect(serviceSpyCalculateWounds).toHaveBeenCalled();
   });
 });
@@ -711,7 +716,6 @@ describe('function Faction Average models killed', () => {
   let service: EpwhammerService;
   let serviceSpyCalculateWounds: any;
   let gun: Gun;
-  let modifiers: Modifiers;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -728,12 +732,11 @@ describe('function Faction Average models killed', () => {
     const SvInv: number = 4;
     const FnP: number = 7;
     const wounds: number = 2;
-    const Wound: number = 0;
-    const Save: number = 0;
+    const hittingOn: string[] = ['3+', '3+'];
 
     service.factionAverageModelsKilled([{
       ...gun, S, Ap, NoS, D,
-    }], Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
+    }], hittingOn, Toughness, Sv, SvInv, FnP, wounds);
     expect(serviceSpyCalculateWounds).toHaveBeenCalled();
   });
   it('if total lesser than 0', () => {
@@ -746,12 +749,11 @@ describe('function Faction Average models killed', () => {
     const SvInv: number = 4;
     const FnP: number = 7;
     const wounds: number = 30;
-    const Wound: number = 0;
-    const Save: number = 0;
+    const hittingOn: string[] = ['3+', '3+'];
 
     service.factionAverageModelsKilled([{
       ...gun, S, Ap, NoS, D,
-    }], Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
+    }], hittingOn, Toughness, Sv, SvInv, FnP, wounds);
     expect(serviceSpyCalculateWounds).toHaveBeenCalled();
   });
 });
@@ -1037,9 +1039,9 @@ describe('calculateRerollDamage test', () => {
         rerollSaved: 'none',
         rerollDamage: 'none',
       };
-      const myModifiers = service.modifiers;
+      const alsoMyModifiers = service.modifiers;
 
-      expect(myModifiers).toEqual(mockCurrentModifiers);
+      expect(alsoMyModifiers).toEqual(mockCurrentModifiers);
     });
   });
 });

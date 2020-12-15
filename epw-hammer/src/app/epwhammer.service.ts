@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-restricted-globals */
 /* eslint-disable class-methods-use-this */
 import { Injectable } from '@angular/core';
@@ -22,13 +23,74 @@ export class EpwhammerService {
     rerollDamage: 'none',
   };
 
+   neutralModifiers: Modifiers = {
+     Wound: 0,
+     Save: 0,
+     Hit: 0,
+     Damage: 0,
+     ModAp: 0,
+     SInV: 7,
+     FnP: 7,
+     rerollHits: 'none',
+     rerollWounds: 'none',
+     rerollSaved: 'none',
+     rerollDamage: 'none',
+   };
+
+  precisions: string[]= [
+    '4+', '4+',
+  ];
+
   get modifiers(): Modifiers {
     return this.currentModifiers;
+  }
+
+  get actualPrecisions() {
+    return this.precisions;
+  }
+
+  setPrecisions(precision1: string, precision2:string) {
+    this.precisions[0] = precision1;
+    this.precisions[1] = precision2;
   }
 
   setModifiers(newModifiers:Modifiers | any) {
     this.currentModifiers = newModifiers;
     return this.currentModifiers;
+  }
+
+  toHit(Precision: string, precisionModifier: number): number {
+    let myPrecision: number = 4;
+    switch (Precision) {
+      case '2+':
+        myPrecision = 2;
+        break;
+      case '3+':
+        myPrecision = 3;
+        break;
+      case '4+':
+        myPrecision = 4;
+        break;
+      case '5+':
+        myPrecision = 5;
+        break;
+      case '6+':
+        myPrecision = 6;
+        break;
+      default:
+        break;
+    }
+    let result: number = 7;
+    const usedPrecisionModifier:number = precisionModifier;
+    result = myPrecision;
+    result -= usedPrecisionModifier;
+    if (result < 2) {
+      result = 2;
+    }
+    if (result > 6) {
+      result = 6;
+    }
+    return result;
   }
 
   chooseSv(RegAp: number, Sv: number, SvI: number, { ModAp, Save, SInV }:Modifiers): number {
@@ -128,8 +190,8 @@ export class EpwhammerService {
     return estimatedVal;
   }
 
-  calculations(NoS : string | number, woundOn: number, chosenSv: number):number {
-    const result: number = this.estimateVal(NoS) * woundOn * chosenSv;
+  calculations(NoS : string | number, hitOn:number, woundOn: number, chosenSv: number):number {
+    const result: number = this.estimateVal(NoS) * hitOn * woundOn * chosenSv;
     return result;
   }
 
@@ -229,11 +291,12 @@ export class EpwhammerService {
 
   calculateWounds({
     S, Ap, D, NoS, Range,
-  }: Gun, Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers): number | string {
+  }: Gun, precision: string, Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers): number | string {
     let actualStrength: number = this.estimateVal(S);
     if (Range === 'Melee') {
       actualStrength += 4;
     }
+    let hitOn: number = this.toHit(precision, modifiers.Hit);
     let woundOn: number = this.toWound(actualStrength, Toughness, modifiers.Wound);
     let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers);
     let Attacks: string | number = 1;
@@ -241,6 +304,8 @@ export class EpwhammerService {
       Attacks = NoS;
     }
     Attacks = this.estimateVal(Attacks);
+    hitOn = (7 - hitOn) / 6;
+    hitOn = this.determineRerollEffect(modifiers.rerollHits, hitOn);
     woundOn = (7 - woundOn) / 6;
     woundOn = this.determineRerollEffect(modifiers.rerollWounds, woundOn);
     chosenSv = 1 - (7 - chosenSv) / 6;
@@ -253,7 +318,7 @@ export class EpwhammerService {
       dmg = 1;
     }
 
-    let result: number | string = this.calculations(Attacks, woundOn, chosenSv) * (dmg * thisFnP);
+    let result: number | string = this.calculations(Attacks, hitOn, woundOn, chosenSv) * (dmg * thisFnP);
 
     result = parseFloat(result.toFixed(2));
     if (isNaN(result)) {
@@ -264,7 +329,10 @@ export class EpwhammerService {
 
   calculateDeadModels({
     S, Ap, D, NoS,
-  }: Gun, Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers, wounds: number): number | string {
+  }: Gun,
+  precision:string,
+  Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers, wounds: number): number | string {
+    let hitOn: number = this.toHit(precision, modifiers.Hit);
     let woundOn: number = this.toWound(this.estimateVal(S), Toughness, modifiers.Wound);
     let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers);
     let result: number | string = 0;
@@ -275,10 +343,11 @@ export class EpwhammerService {
     }
     const thisFnP: number = 1 - (7 - Math.min(FnP, modifiers.FnP)) / 6;
     const damage: number = (this.estimateVal(D) * thisFnP);
+    hitOn = (7 - hitOn) / 6;
     woundOn = (7 - woundOn) / 6;
     chosenSv = 1 - (7 - chosenSv) / 6;
 
-    const effectiveDamage: number = (this.calculations(Attacks, woundOn, chosenSv));
+    const effectiveDamage: number = (this.calculations(Attacks, hitOn, woundOn, chosenSv));
     if (!isNaN(effectiveDamage)) {
       if (damage === wounds) {
         result = effectiveDamage;
@@ -301,12 +370,19 @@ export class EpwhammerService {
     return result;
   }
 
-  factionAverageWounds(gun: Gun[], T: number, Sv: number, SvInv: number, FnP: number, modifiers:Modifiers): number {
+  factionAverageWounds(gun: Gun[], precision: string[], T: number, Sv: number, SvInv: number, FnP: number)
+  : number {
     let i: number = 0;
     let total: number = 0;
     let result: number | string = 0;
     for (i; i < gun.length; i += 1) {
-      result = this.calculateWounds(gun[i], T, Sv, SvInv, FnP, modifiers);
+      let correctprecision;
+      if (gun[i].Range === 'melee') {
+        correctprecision = precision[1];
+      } else {
+        correctprecision = precision[2];
+      }
+      result = this.calculateWounds(gun[i], correctprecision, T, Sv, SvInv, FnP, this.neutralModifiers);
       if (typeof (result) === 'number') {
         total += result;
       }
@@ -315,13 +391,19 @@ export class EpwhammerService {
     return (parseFloat(total.toFixed(2)));
   }
 
-  factionAverageModelsKilled(gun: Gun[], T: number, Sv: number, SvInv: number, FnP: number, modifiers:Modifiers, wounds: number)
+  factionAverageModelsKilled(gun: Gun[], precision: string[], T: number, Sv: number, SvInv: number, FnP: number, wounds: number)
   : number {
     let i: number = 0;
     let total: number = 0;
     let result: number | string = 0;
     for (i; i < gun.length; i += 1) {
-      result = this.calculateDeadModels(gun[i], T, Sv, SvInv, FnP, modifiers, wounds);
+      let correctprecision;
+      if (gun[i].Range === 'melee') {
+        correctprecision = precision[1];
+      } else {
+        correctprecision = precision[2];
+      }
+      result = this.calculateDeadModels(gun[i], correctprecision, T, Sv, SvInv, FnP, this.neutralModifiers, wounds);
       if (typeof (result) === 'number') {
         if (!isNaN(result)) {
           total += result;

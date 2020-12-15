@@ -1,3 +1,5 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-unused-vars */
 /* eslint-disable guard-for-in */
@@ -31,6 +33,20 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
 
   chart: any;
 
+  possibleBWS: string[] = ['2+', '3+', '4+', '5+', '6+']
+
+  allProfilesUsed: string[] = [];
+
+  factionChosen: string = ''
+
+  factionPrecisions: string[] = [];
+
+  actualPrecisions: string[] = [];
+
+  guns$: Gun[] = [];
+
+  gunList:Gun[]=[]
+
   actualmodifiers = this.epwhammerService.currentModifiers;
 
   marineEquivalent = MEQ;
@@ -43,20 +59,13 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
 
   knightEquivalent = KEQ;
 
-  allProfilesUsed: string[] = [];
-
-  factionChosen: string = ''
-
-  guns$: Gun[] = [];
-
-  gunList:Gun[]=[]
-
   ngOnInit(): void {
     setTimeout(() => {
       this.factionChosen = this.issueService.getSelectedFaction();
       this.issueService.getIssues(this.factionChosen).subscribe((value:any) => {
         this.gunList = value;
       });
+      this.setPrecisions(this.factionChosen);
     }, 300);
   }
 
@@ -130,6 +139,36 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return result;
   }
 
+  setPrecisions(chosenFaction: string) {
+    switch (chosenFaction) {
+      case 'Astartes':
+        this.epwhammerService.setPrecisions('3+', '3+');
+        this.factionPrecisions = ['3+', '3+'];
+        break;
+      case 'Harlequins':
+        this.epwhammerService.setPrecisions('3+', '3+');
+        this.factionPrecisions = ['3+', '3+'];
+        break;
+      case 'Necrons':
+        this.epwhammerService.setPrecisions('3+', '3+');
+        this.factionPrecisions = ['3+', '3+'];
+        break;
+      default:
+        this.epwhammerService.setPrecisions('4+', '4+');
+    }
+    this.actualPrecisions = this.epwhammerService.actualPrecisions;
+  }
+
+  usePrecision(range: number | string, possiblePrecisions: string[]): string {
+    let resolve: string = '';
+    if (range === 'melee') {
+      resolve = possiblePrecisions[1];
+    } else {
+      resolve = possiblePrecisions[0];
+    }
+    return resolve;
+  }
+
   calculateOverchargedWounds(Equivalent: Unit) {
     let total: number | string = '';
     const overchargedProfile = this.selectedGun.Overcharged;
@@ -139,6 +178,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
         {
           ...this.selectedGun, S, Ap, D,
         },
+        this.usePrecision('range', this.actualPrecisions),
         Equivalent.Toughness,
         Equivalent.Sv,
         Equivalent.SvIn,
@@ -157,12 +197,13 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
       const profileData = this.selectedGun.profile[Object.keys(this.selectedGun.profile)[id]];
       if (typeof (profileData) !== 'undefined') {
         const {
-          NoS, S, Ap, D,
+          NoS, S, Ap, D, Range,
         } = profileData;
         const result = this.epwhammerService.calculateWounds(
           {
-            ...gun, NoS, S, Ap, D,
+            ...gun, Range, NoS, S, Ap, D,
           },
+          this.usePrecision(Range, this.actualPrecisions),
           Equivalent.Toughness,
           Equivalent.Sv,
           Equivalent.SvIn,
@@ -184,12 +225,13 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
       const profileData = this.selectedGun.profile[Object.keys(this.selectedGun.profile)[id]];
       if (typeof (profileData) !== 'undefined') {
         const {
-          NoS, S, Ap, D,
+          NoS, S, Ap, D, Range,
         } = profileData;
         const result = this.epwhammerService.calculateDeadModels(
           {
-            ...gun, NoS, S, Ap, D,
+            ...gun, NoS, S, Ap, D, Range,
           },
+          this.usePrecision(Range, this.actualPrecisions),
           Equivalent.Toughness,
           Equivalent.Sv,
           Equivalent.SvIn,
@@ -212,6 +254,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
       if (typeof (profileData) !== 'undefined') {
         const result = this.epwhammerService.calculateWounds(
           profileData,
+          this.usePrecision('range', this.actualPrecisions),
           Equivalent.Toughness,
           Equivalent.Sv,
           Equivalent.SvIn,
@@ -233,6 +276,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
       if (typeof (profileData) !== 'undefined') {
         const result = this.epwhammerService.calculateDeadModels(
           profileData,
+          this.usePrecision('range', this.actualPrecisions),
           Equivalent.Toughness,
           Equivalent.Sv,
           Equivalent.SvIn,
@@ -254,6 +298,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
   calculateBasicWounds(Equivalent: Unit) {
     const result = this.epwhammerService.calculateWounds(
       this.selectedGun,
+      this.usePrecision(this.selectedGun.range, this.actualPrecisions),
       Equivalent.Toughness,
       Equivalent.Sv,
       Equivalent.SvIn,
@@ -268,6 +313,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     let total: string | number = '';
     const result = this.epwhammerService.calculateDeadModels(
       this.selectedGun,
+      this.usePrecision(this.selectedGun.range, this.actualPrecisions),
       Equivalent.Toughness,
       Equivalent.Sv,
       Equivalent.SvIn,
@@ -295,6 +341,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
         {
           ...this.selectedGun, S, Ap, D,
         },
+        this.usePrecision('range', this.actualPrecisions),
         Equivalent.Toughness,
         Equivalent.Sv,
         Equivalent.SvIn,
@@ -314,11 +361,11 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
   factionAverageAllWounds(Equivalent: Unit) {
     const result = this.epwhammerService.factionAverageWounds(
       this.gunList,
+      this.factionPrecisions,
       Equivalent.Toughness,
       Equivalent.Sv,
       Equivalent.SvIn,
       Equivalent.FnP,
-      this.actualmodifiers,
     );
     const total = result;
     return total || '';
@@ -328,11 +375,11 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     let total;
     const result = this.epwhammerService.factionAverageModelsKilled(
       this.gunList,
+      this.factionPrecisions,
       Equivalent.Toughness,
       Equivalent.Sv,
       Equivalent.SvIn,
       Equivalent.FnP,
-      this.actualmodifiers,
       Equivalent.W,
     );
     if (result === 0) {
@@ -525,39 +572,39 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
         columns: [
           ['Average Wounds', this.epwhammerService.factionAverageWounds(
             this.gunList,
+            this.factionPrecisions,
             this.marineEquivalent.Toughness,
             this.marineEquivalent.Sv,
             this.marineEquivalent.SvIn,
             this.marineEquivalent.FnP,
-            this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
             this.gunList,
+            this.factionPrecisions,
             this.terminatorEquivalent.Toughness,
             this.terminatorEquivalent.Sv,
             this.terminatorEquivalent.SvIn,
             this.terminatorEquivalent.FnP,
-            this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
             this.gunList,
+            this.factionPrecisions,
             this.guardsmanEquivalent.Toughness,
             this.guardsmanEquivalent.Sv,
             this.guardsmanEquivalent.SvIn,
             this.guardsmanEquivalent.FnP,
-            this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
             this.gunList,
+            this.factionPrecisions,
             this.vehicleEquivalent.Toughness,
             this.vehicleEquivalent.Sv,
             this.vehicleEquivalent.SvIn,
             this.vehicleEquivalent.FnP,
-            this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
             this.gunList,
+            this.factionPrecisions,
             this.knightEquivalent.Toughness,
             this.knightEquivalent.Sv,
             this.knightEquivalent.SvIn,
             this.knightEquivalent.FnP,
-            this.actualmodifiers,
           )],
         ],
       });
@@ -706,39 +753,39 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
           ['x', 'MEQ', 'TEQ', 'GEQ', 'VEQ', 'KEQ'],
           ['Average Wounds', this.epwhammerService.factionAverageWounds(
             this.gunList,
+            this.factionPrecisions,
             this.marineEquivalent.Toughness,
             this.marineEquivalent.Sv,
             this.marineEquivalent.SvIn,
             this.marineEquivalent.FnP,
-            this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
             this.gunList,
+            this.factionPrecisions,
             this.terminatorEquivalent.Toughness,
             this.terminatorEquivalent.Sv,
             this.terminatorEquivalent.SvIn,
             this.terminatorEquivalent.FnP,
-            this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
             this.gunList,
+            this.factionPrecisions,
             this.guardsmanEquivalent.Toughness,
             this.guardsmanEquivalent.Sv,
             this.guardsmanEquivalent.SvIn,
             this.guardsmanEquivalent.FnP,
-            this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
             this.gunList,
+            this.factionPrecisions,
             this.vehicleEquivalent.Toughness,
             this.vehicleEquivalent.Sv,
             this.vehicleEquivalent.SvIn,
             this.vehicleEquivalent.FnP,
-            this.actualmodifiers,
           ), this.epwhammerService.factionAverageWounds(
             this.gunList,
+            this.factionPrecisions,
             this.knightEquivalent.Toughness,
             this.knightEquivalent.Sv,
             this.knightEquivalent.SvIn,
             this.knightEquivalent.FnP,
-            this.actualmodifiers,
           )],
         ],
       },

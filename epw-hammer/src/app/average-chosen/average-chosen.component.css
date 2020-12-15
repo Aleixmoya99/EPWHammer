@@ -108,3 +108,32 @@ th{
 #rowTitle{
   text-align: center;
 }
+
+#precisions{
+  margin-top: 2%;
+  margin-bottom: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #f7f7f7d2;
+  color: black;
+}
+#precision{
+  padding: 5px;
+  margin-top: 12px;
+  margin-bottom: 2px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+}
+#precisionName{
+  margin-bottom: 0px;
+}
+select{
+  margin-left: 5px;
+  border-radius: 5px;
+  border: 1px solid black;
+}
