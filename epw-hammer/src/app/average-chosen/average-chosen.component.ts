@@ -145,11 +145,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
         Equivalent.FnP,
         this.actualmodifiers,
       );
-      if (result === 0) {
-        total = '';
-      } else {
-        total = result;
-      }
+      total = result;
     }
     return total;
   }
@@ -247,11 +243,8 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
         if (typeof (result) !== 'undefined' && result !== 0) {
           total = result;
         }
-        if (result === 0) {
-          total = '0';
-        } else {
-          total = result;
-        }
+      } else {
+        total = '0';
       }
     }
     return total;
