@@ -721,4 +721,24 @@ describe('onSelect testing', () => {
     component.onSelect(meltadGun);
     expect(spyTime).toHaveBeenCalled();
   });
+  it('testing set precisions Astartes', () => {
+    component.setPrecisions('Astartes');
+    const myPrecision = component.actualPrecisions;
+    expect(myPrecision).toEqual(['3+', '3+']);
+  });
+  it('testing set precisions Harlequins', () => {
+    component.setPrecisions('Harlequins');
+    const myPrecision = component.actualPrecisions;
+    expect(myPrecision).toEqual(['3+', '3+']);
+  });
+  it('testing set precisions Necrons', () => {
+    component.setPrecisions('Necrons');
+    const myPrecision = component.actualPrecisions;
+    expect(myPrecision).toEqual(['3+', '3+']);
+  });
+  it('testing set precisions Default', () => {
+    component.setPrecisions('sdvavins');
+    const myPrecision = component.actualPrecisions;
+    expect(myPrecision).toEqual(['4+', '4+']);
+  });
 });

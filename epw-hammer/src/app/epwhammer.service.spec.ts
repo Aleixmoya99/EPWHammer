@@ -666,17 +666,17 @@ describe('function Faction Average Wounds', () => {
       Overcharged: '',
     },
     {
-      name: 'Absolvor Bolt Pistol',
+      name: 'Astartes Chainsword',
       points: 0,
-      Range: 18,
-      Type: 'Pistol',
-      NoS: 1,
-      S: 5,
+      Range: 'Melee',
+      Type: 'Melee',
+      S: 'User',
       Ap: -1,
-      D: 2,
-      Ability: '',
+      D: 1,
+      Ability: '+1 Attack',
       profile: '',
       Overcharged: '',
+      NoS: '',
     },
   ];
 
@@ -1023,6 +1023,41 @@ describe('calculateRerollDamage test', () => {
     const result:number = service.calculateRerollDamage(myModifiers.rerollDamage, damage);
 
     expect(result).toEqual(1);
+  });
+  it('to Hit 4+', () => {
+    const myPrecisions = '4+';
+    const result = service.toHit(myPrecisions, 0);
+    expect(result).toEqual(4);
+  });
+  it('to Hit 2+', () => {
+    const myPrecisions = '4+';
+    const result = service.toHit(myPrecisions, 0);
+    expect(result).toEqual(4);
+  });
+  it('to Hit 5+', () => {
+    const myPrecisions = '5+';
+    const result = service.toHit(myPrecisions, 0);
+    expect(result).toEqual(5);
+  });
+  it('to Hit 6+', () => {
+    const myPrecisions = '6+';
+    const result = service.toHit(myPrecisions, 0);
+    expect(result).toEqual(6);
+  });
+  it('to Hit 2+ with positive modifier cannot be modified under 2', () => {
+    const myPrecisions = '2+';
+    const result = service.toHit(myPrecisions, 1);
+    expect(result).toEqual(2);
+  });
+  it('to Hit 6+ with negative modifier cannot be modified over 6', () => {
+    const myPrecisions = '6+';
+    const result = service.toHit(myPrecisions, -1);
+    expect(result).toEqual(6);
+  });
+  it('to Hit 3+ with negative modifier expected 4+', () => {
+    const myPrecisions = '3+';
+    const result = service.toHit(myPrecisions, -1);
+    expect(result).toEqual(4);
   });
   describe('getModifiers', () => {
     it('test getter', () => {
