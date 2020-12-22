@@ -92,6 +92,29 @@ th{
   position: sticky;
   top: 0;
 }
+#attributes{
+  margin-top: 2%;
+  margin-bottom: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 5px;
+  align-items: center;
+  padding: 5px;
+  padding-top: 7px;
+  background-color: #f7f7f7d2;
+  color: black;
+}
+#attributeName{
+  margin-bottom: 0px;
+}
+#attribute{
+  border-radius: 4px;
+  border: 1px solid black;
+  margin-left:4px;
+  max-height: 30px;
+  max-width: 25px;
+}
 #selctedweaponTable{
   overflow-x:scroll;
   width:95%;

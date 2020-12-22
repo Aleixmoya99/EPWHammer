@@ -35,6 +35,8 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
 
   possibleBWS: string[] = ['2+', '3+', '4+', '5+', '6+']
 
+  possibleAoS: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+
   allProfilesUsed: string[] = [];
 
   factionChosen: string = ''
@@ -42,6 +44,10 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
   factionPrecisions: string[] = [];
 
   actualPrecisions: string[] = [];
+
+  actualStrength: number = 4;
+
+  actualAttacks: number = 1;
 
   guns$: Gun[] = [];
 
@@ -65,7 +71,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
       this.issueService.getIssues(this.factionChosen).subscribe((value:any) => {
         this.gunList = value;
       });
-      this.setPrecisions(this.factionChosen);
+      this.setStats(this.factionChosen);
     }, 300);
   }
 
@@ -139,29 +145,47 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return result;
   }
 
-  setPrecisions(chosenFaction: string) {
+  setStats(chosenFaction: string) {
     switch (chosenFaction) {
       case 'Astartes':
-        this.epwhammerService.setPrecisions('3+', '3+');
         this.factionPrecisions = ['3+', '3+'];
+        this.actualAttacks = 2;
+        this.actualStrength = 4;
+        this.epwhammerService.setPrecisions('3+', '3+');
+        this.epwhammerService.setActualAttacks(this.actualAttacks);
+        this.epwhammerService.SetActualBaseStrength(this.actualStrength);
         break;
       case 'Harlequins':
-        this.epwhammerService.setPrecisions('3+', '3+');
         this.factionPrecisions = ['3+', '3+'];
+        this.actualAttacks = 4;
+        this.actualStrength = 3;
+        this.epwhammerService.setPrecisions('3+', '3+');
+        this.epwhammerService.setActualAttacks(this.actualAttacks);
+        this.epwhammerService.SetActualBaseStrength(this.actualStrength);
         break;
       case 'Necrons':
-        this.epwhammerService.setPrecisions('3+', '3+');
         this.factionPrecisions = ['3+', '3+'];
+        this.actualAttacks = 1;
+        this.actualStrength = 4;
+        this.epwhammerService.setPrecisions('3+', '3+');
+        this.epwhammerService.setActualAttacks(this.actualAttacks);
+        this.epwhammerService.SetActualBaseStrength(this.actualStrength);
         break;
       default:
         this.epwhammerService.setPrecisions('4+', '4+');
+        this.actualAttacks = 1;
+        this.actualStrength = 4;
+        this.epwhammerService.setActualAttacks(this.actualAttacks);
+        this.epwhammerService.SetActualBaseStrength(this.actualStrength);
     }
     this.actualPrecisions = this.epwhammerService.actualPrecisions;
+    this.actualAttacks = this.epwhammerService.actualAttacks;
+    this.actualStrength = this.epwhammerService.actualBaseStrength;
   }
 
   usePrecision(range: number | string, possiblePrecisions: string[]): string {
     let resolve: string = '';
-    if (range === 'melee') {
+    if (range === 'Melee') {
       resolve = possiblePrecisions[1];
     } else {
       resolve = possiblePrecisions[0];
@@ -178,7 +202,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
         {
           ...this.selectedGun, S, Ap, D,
         },
-        this.usePrecision('range', this.actualPrecisions),
+        this.usePrecision('Range', this.actualPrecisions),
         Equivalent.Toughness,
         Equivalent.Sv,
         Equivalent.SvIn,
@@ -254,7 +278,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
       if (typeof (profileData) !== 'undefined') {
         const result = this.epwhammerService.calculateWounds(
           profileData,
-          this.usePrecision('range', this.actualPrecisions),
+          this.usePrecision('Range', this.actualPrecisions),
           Equivalent.Toughness,
           Equivalent.Sv,
           Equivalent.SvIn,
@@ -298,7 +322,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
   calculateBasicWounds(Equivalent: Unit) {
     const result = this.epwhammerService.calculateWounds(
       this.selectedGun,
-      this.usePrecision(this.selectedGun.range, this.actualPrecisions),
+      this.usePrecision(this.selectedGun.Range, this.actualPrecisions),
       Equivalent.Toughness,
       Equivalent.Sv,
       Equivalent.SvIn,
@@ -313,7 +337,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     let total: string | number = '';
     const result = this.epwhammerService.calculateDeadModels(
       this.selectedGun,
-      this.usePrecision(this.selectedGun.range, this.actualPrecisions),
+      this.usePrecision(this.selectedGun.Range, this.actualPrecisions),
       Equivalent.Toughness,
       Equivalent.Sv,
       Equivalent.SvIn,

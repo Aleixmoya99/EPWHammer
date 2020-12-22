@@ -26,6 +26,38 @@
       </label>
     </div>
   </div>
+  <div>
+    <div id="attributes">
+      <p id='attributeName'>Strength</p>
+      <label>
+        <select [(ngModel)]="actualStrength">
+          <option [value]="item" *ngFor="let item of possibleAoS" [ngValue]="item">{{item}}</option>
+        </select>
+      </label>
+    </div>
+    <div id="attributes">
+      <p id='attributeName'>Attacks</p>
+      <label>
+        <select [(ngModel)]="actualAttacks">
+          <option [value]="item" *ngFor="let item of possibleAoS" [ngValue]="item">{{item}}</option>
+        </select>
+      </label>
+    </div>
+  </div>
+  <div>
+    <div id="attributes">
+      <p id='attributeName'>Unit Size</p>
+      <label>
+        <input id='attribute' type="text" [(ngModel)]='actualStrength'/>
+      </label>
+    </div>
+    <div id="attributes">
+      <p id='attributeName'>Guns per Model</p>
+      <label>
+        <input id='attribute' type="text" [(ngModel)]='actualAttacks'/>
+      </label>
+    </div>
+  </div>
 <table id="selctedweaponTable">
   <caption style="display: none;">selected weapon table</caption>
   <tr>

@@ -39,6 +39,7 @@ export class AverageModifiersComponent implements OnInit {
       rerollDamage: 'none',
     };
     this.epwhammerService.setModifiers(originalModifiers);
+    this.actualModifiers = originalModifiers;
   }
 
   actionFunction() {

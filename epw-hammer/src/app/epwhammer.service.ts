@@ -37,6 +37,10 @@ export class EpwhammerService {
      rerollDamage: 'none',
    };
 
+  attacks: number = 1;
+
+  baseStrength: number = 4;
+
   precisions: string[]= [
     '4+', '4+',
   ];
@@ -47,6 +51,22 @@ export class EpwhammerService {
 
   get actualPrecisions() {
     return this.precisions;
+  }
+
+  get actualAttacks() {
+    return this.attacks;
+  }
+
+  get actualBaseStrength() {
+    return this.baseStrength;
+  }
+
+  setActualAttacks(newAttacks: number) {
+    this.attacks = newAttacks;
+  }
+
+  SetActualBaseStrength(newBaseStrength: number) {
+    this.baseStrength = newBaseStrength;
   }
 
   setPrecisions(precision1: string, precision2:string) {
@@ -293,16 +313,14 @@ export class EpwhammerService {
     S, Ap, D, NoS, Range,
   }: Gun, precision: string, Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers): number | string {
     let actualStrength: number = this.estimateVal(S);
+    let Attacks: string | number = NoS;
     if (Range === 'Melee') {
-      actualStrength += 4;
+      Attacks = this.attacks;
+      actualStrength += this.baseStrength;
     }
     let hitOn: number = this.toHit(precision, modifiers.Hit);
     let woundOn: number = this.toWound(actualStrength, Toughness, modifiers.Wound);
     let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers);
-    let Attacks: string | number = 1;
-    if (NoS !== undefined) {
-      Attacks = NoS;
-    }
     Attacks = this.estimateVal(Attacks);
     hitOn = (7 - hitOn) / 6;
     hitOn = this.determineRerollEffect(modifiers.rerollHits, hitOn);
@@ -328,25 +346,30 @@ export class EpwhammerService {
   }
 
   calculateDeadModels({
-    S, Ap, D, NoS,
+    S, Ap, D, NoS, Range,
   }: Gun,
   precision:string,
   Toughness: number, Sv: number, SvInv: number, FnP: number, modifiers: Modifiers, wounds: number): number | string {
+    let actualStrength: number = this.estimateVal(S);
+    let Attacks: string | number = NoS;
+    if (Range === 'Melee') {
+      Attacks = this.attacks;
+      actualStrength += this.baseStrength;
+    }
     let hitOn: number = this.toHit(precision, modifiers.Hit);
-    let woundOn: number = this.toWound(this.estimateVal(S), Toughness, modifiers.Wound);
+    let woundOn: number = this.toWound(actualStrength, Toughness, modifiers.Wound);
     let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers);
+    Attacks = this.estimateVal(Attacks);
+    hitOn = (7 - hitOn) / 6;
+    hitOn = this.determineRerollEffect(modifiers.rerollHits, hitOn);
+    woundOn = (7 - woundOn) / 6;
+    woundOn = this.determineRerollEffect(modifiers.rerollWounds, woundOn);
+    chosenSv = 1 - (7 - chosenSv) / 6;
+    chosenSv = this.determineRerollEffect(modifiers.rerollSaved, chosenSv);
+    const thisFnP: number = 1 - (7 - Math.min(FnP, modifiers.FnP)) / 6;
     let result: number | string = 0;
     let i: number = -1;
-    let Attacks: string | number = 1;
-    if (NoS !== undefined) {
-      Attacks = NoS;
-    }
-    const thisFnP: number = 1 - (7 - Math.min(FnP, modifiers.FnP)) / 6;
     const damage: number = (this.estimateVal(D) * thisFnP);
-    hitOn = (7 - hitOn) / 6;
-    woundOn = (7 - woundOn) / 6;
-    chosenSv = 1 - (7 - chosenSv) / 6;
-
     const effectiveDamage: number = (this.calculations(Attacks, hitOn, woundOn, chosenSv));
     if (!isNaN(effectiveDamage)) {
       if (damage === wounds) {
@@ -361,7 +384,12 @@ export class EpwhammerService {
         }
         result = i;
       }
-      result = Math.round((parseFloat(result.toFixed(2))));
+      const preResult: number = Math.round((parseFloat(result.toFixed(2))));
+      if (result - preResult > 0.45) {
+        result = preResult + 1;
+      } else {
+        result = preResult;
+      }
     }
 
     if (typeof (S) === 'undefined' || typeof (Ap) === 'undefined' || typeof (D) === 'undefined') {
@@ -377,7 +405,7 @@ export class EpwhammerService {
     let result: number | string = 0;
     for (i; i < gun.length; i += 1) {
       let correctprecision;
-      if (gun[i].Range === 'melee') {
+      if (gun[i].Range === 'Melee') {
         correctprecision = precision[1];
       } else {
         correctprecision = precision[2];
@@ -398,7 +426,7 @@ export class EpwhammerService {
     let result: number | string = 0;
     for (i; i < gun.length; i += 1) {
       let correctprecision;
-      if (gun[i].Range === 'melee') {
+      if (gun[i].Range === 'Melee') {
         correctprecision = precision[1];
       } else {
         correctprecision = precision[2];

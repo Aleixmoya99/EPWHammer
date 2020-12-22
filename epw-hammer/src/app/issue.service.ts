@@ -8,7 +8,7 @@ import { Gun } from './home';
   providedIn: 'root',
 })
 export class IssueService {
-  endpoint = 'http://192.168.0.51:5000' || 'http://localhost:5000';
+  endpoint = 'http://192.168.1.51:5000' || 'http://localhost:5000';
 
   httpOptions = {
     headers: new HttpHeaders({

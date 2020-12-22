@@ -722,22 +722,22 @@ describe('onSelect testing', () => {
     expect(spyTime).toHaveBeenCalled();
   });
   it('testing set precisions Astartes', () => {
-    component.setPrecisions('Astartes');
+    component.setStats('Astartes');
     const myPrecision = component.actualPrecisions;
     expect(myPrecision).toEqual(['3+', '3+']);
   });
   it('testing set precisions Harlequins', () => {
-    component.setPrecisions('Harlequins');
+    component.setStats('Harlequins');
     const myPrecision = component.actualPrecisions;
     expect(myPrecision).toEqual(['3+', '3+']);
   });
   it('testing set precisions Necrons', () => {
-    component.setPrecisions('Necrons');
+    component.setStats('Necrons');
     const myPrecision = component.actualPrecisions;
     expect(myPrecision).toEqual(['3+', '3+']);
   });
   it('testing set precisions Default', () => {
-    component.setPrecisions('sdvavins');
+    component.setStats('sdvavins');
     const myPrecision = component.actualPrecisions;
     expect(myPrecision).toEqual(['4+', '4+']);
   });
