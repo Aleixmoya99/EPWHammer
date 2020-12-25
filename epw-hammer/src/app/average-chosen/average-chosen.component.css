@@ -21,8 +21,8 @@ main {
   text-align: center;
   text-transform: uppercase;
   font-size: 15px;
-  padding: 20px;
-  width: 150px;
+  padding: 10px;
+  width: 200px;
   transition: all 0.4s;
   cursor: pointer;
 }
@@ -47,6 +47,43 @@ main {
   opacity: 1;
   right: 0;
 }
+
+.smallButton {
+  --button-bg: linear-gradient(to right, #5e9dce, #83b5df);
+  display: inline-block;
+  border-radius: 4px;
+  background: var(--button-bg) !important;
+  color: #FFFFFF;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 10px;
+  padding: 12px;
+  width: 90px;
+  transition: all 0.4s;
+  cursor: pointer;
+}
+.smallButton span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.4s;
+}
+.smallButton span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+.smallButton:hover span {
+  padding-right: 25px;
+}
+.smallButton:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
 table{
   border-radius: 5px;
   background-color: #f7f7f7d2;
@@ -92,6 +129,21 @@ th{
   position: sticky;
   top: 0;
 }
+.verticalCenteredList{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#Melee{
+  display: none;
+}
+
+#Ranged{
+  display: none;
+}
+
 #attributes{
   margin-top: 2%;
   margin-bottom: 2%;

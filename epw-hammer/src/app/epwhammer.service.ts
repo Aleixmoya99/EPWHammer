@@ -41,6 +41,10 @@ export class EpwhammerService {
 
   baseStrength: number = 4;
 
+  numberOfModels: number = 1;
+
+  gunsPerModels: number = 1;
+
   precisions: string[]= [
     '4+', '4+',
   ];
@@ -61,6 +65,14 @@ export class EpwhammerService {
     return this.baseStrength;
   }
 
+  get actualNumberOfModels() {
+    return this.numberOfModels;
+  }
+
+  get actualGunsPerModels() {
+    return this.gunsPerModels;
+  }
+
   setActualAttacks(newAttacks: number) {
     this.attacks = newAttacks;
   }
@@ -72,6 +84,14 @@ export class EpwhammerService {
   setPrecisions(precision1: string, precision2:string) {
     this.precisions[0] = precision1;
     this.precisions[1] = precision2;
+  }
+
+  setNumberOfModels(models: number) {
+    this.numberOfModels = models;
+  }
+
+  setGunsPerfModels(gunsInModel: number) {
+    this.gunsPerModels = gunsInModel;
   }
 
   setModifiers(newModifiers:Modifiers | any) {
@@ -315,8 +335,8 @@ export class EpwhammerService {
     let actualStrength: number = this.estimateVal(S);
     let Attacks: string | number = NoS;
     if (Range === 'Melee') {
-      Attacks = this.attacks;
-      actualStrength += this.baseStrength;
+      Attacks = this.actualAttacks;
+      actualStrength += this.actualBaseStrength;
     }
     let hitOn: number = this.toHit(precision, modifiers.Hit);
     let woundOn: number = this.toWound(actualStrength, Toughness, modifiers.Wound);
@@ -337,7 +357,7 @@ export class EpwhammerService {
     }
 
     let result: number | string = this.calculations(Attacks, hitOn, woundOn, chosenSv) * (dmg * thisFnP);
-
+    result = result * this.actualNumberOfModels * this.actualGunsPerModels;
     result = parseFloat(result.toFixed(2));
     if (isNaN(result)) {
       result = '';

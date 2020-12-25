@@ -9,7 +9,6 @@ import {
   Optional,
   OnInit,
 } from '@angular/core';
-import { Observable } from 'rxjs';
 import * as c3 from 'c3';
 import {
   MatDialog, MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA,
@@ -35,7 +34,7 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
 
   possibleBWS: string[] = ['2+', '3+', '4+', '5+', '6+']
 
-  possibleAoS: number[] = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  possibleAoS: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
 
   allProfilesUsed: string[] = [];
 
@@ -48,6 +47,14 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
   actualStrength: number = 4;
 
   actualAttacks: number = 1;
+
+  numberOfModels: number = 1;
+
+  gunsPerfModels: number = 1;
+
+  Melee: Boolean = false;
+
+  Ranged: Boolean = false;
 
   guns$: Gun[] = [];
 
@@ -145,6 +152,17 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     return result;
   }
 
+  saveMelee() {
+    this.epwhammerService.setActualAttacks(this.actualAttacks);
+    this.epwhammerService.SetActualBaseStrength(this.actualStrength);
+    this.chartDisplay();
+  }
+
+  saveRange() {
+    this.epwhammerService.setActualAttacks(this.actualAttacks);
+    this.epwhammerService.SetActualBaseStrength(this.actualStrength);
+  }
+
   setStats(chosenFaction: string) {
     switch (chosenFaction) {
       case 'Astartes':
@@ -217,23 +235,39 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
   calculateProfileWounds(Equivalent: Unit, id: number) {
     let total: number | string = '';
     const gun: Gun = this.selectedGun;
+    const meleeRange = this.selectedGun.Range;
+    let result: number | string;
     if (typeof (this.selectedGun.profile) !== 'undefined') {
       const profileData = this.selectedGun.profile[Object.keys(this.selectedGun.profile)[id]];
       if (typeof (profileData) !== 'undefined') {
         const {
           NoS, S, Ap, D, Range,
         } = profileData;
-        const result = this.epwhammerService.calculateWounds(
-          {
-            ...gun, Range, NoS, S, Ap, D,
-          },
-          this.usePrecision(Range, this.actualPrecisions),
-          Equivalent.Toughness,
-          Equivalent.Sv,
-          Equivalent.SvIn,
-          Equivalent.FnP,
-          this.actualmodifiers,
-        );
+        if (meleeRange === 'Melee') {
+          result = this.epwhammerService.calculateWounds(
+            {
+              ...gun, NoS, S, Ap, D,
+            },
+            this.usePrecision(Range, this.actualPrecisions),
+            Equivalent.Toughness,
+            Equivalent.Sv,
+            Equivalent.SvIn,
+            Equivalent.FnP,
+            this.actualmodifiers,
+          );
+        } else {
+          result = this.epwhammerService.calculateWounds(
+            {
+              ...gun, Range, NoS, S, Ap, D,
+            },
+            this.usePrecision(Range, this.actualPrecisions),
+            Equivalent.Toughness,
+            Equivalent.Sv,
+            Equivalent.SvIn,
+            Equivalent.FnP,
+            this.actualmodifiers,
+          );
+        }
         if (typeof (result) !== 'undefined' && result !== 0) {
           total = result;
         }
@@ -244,25 +278,42 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
 
   calculateProfileDead(Equivalent: Unit, id: number) {
     let total: number | string = '';
+    const meleeRange = this.selectedGun.Range;
     const gun: Gun = this.selectedGun;
+    let result: number | string;
     if (typeof (this.selectedGun.profile) !== 'undefined') {
       const profileData = this.selectedGun.profile[Object.keys(this.selectedGun.profile)[id]];
       if (typeof (profileData) !== 'undefined') {
         const {
           NoS, S, Ap, D, Range,
         } = profileData;
-        const result = this.epwhammerService.calculateDeadModels(
-          {
-            ...gun, NoS, S, Ap, D, Range,
-          },
-          this.usePrecision(Range, this.actualPrecisions),
-          Equivalent.Toughness,
-          Equivalent.Sv,
-          Equivalent.SvIn,
-          Equivalent.FnP,
-          this.actualmodifiers,
-          Equivalent.W,
-        );
+        if (meleeRange === 'Melee') {
+          result = this.epwhammerService.calculateDeadModels(
+            {
+              ...this.selectedGun, NoS, S, Ap, D,
+            },
+            this.usePrecision(Range, this.actualPrecisions),
+            Equivalent.Toughness,
+            Equivalent.Sv,
+            Equivalent.SvIn,
+            Equivalent.FnP,
+            this.actualmodifiers,
+            Equivalent.W,
+          );
+        } else {
+          result = this.epwhammerService.calculateDeadModels(
+            {
+              ...gun, NoS, S, Ap, D, Range,
+            },
+            this.usePrecision(Range, this.actualPrecisions),
+            Equivalent.Toughness,
+            Equivalent.Sv,
+            Equivalent.SvIn,
+            Equivalent.FnP,
+            this.actualmodifiers,
+            Equivalent.W,
+          );
+        }
         if (typeof (result) !== 'undefined') {
           total = result;
         }
@@ -591,6 +642,17 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
 
   onSelect(gun: any): void {
     this.selectedGun = gun;
+    if (this.selectedGun.Range === 'Melee') {
+      this.Melee = true;
+      this.Ranged = false;
+    } else {
+      this.Melee = false;
+      this.Ranged = true;
+    }
+    this.chartDisplay();
+  }
+
+  chartDisplay(): void {
     for (let i = 0; i < 4; i += 1) {
       this.chart.load({
         columns: [
