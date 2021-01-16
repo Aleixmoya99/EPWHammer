@@ -21,6 +21,8 @@ export class EpwhammerService {
     rerollWounds: 'none',
     rerollSaved: 'none',
     rerollDamage: 'none',
+    mustWoundOn: 'none',
+    mustHitOn: 'none',
   };
 
    neutralModifiers: Modifiers = {
@@ -35,6 +37,8 @@ export class EpwhammerService {
      rerollWounds: 'none',
      rerollSaved: 'none',
      rerollDamage: 'none',
+     mustWoundOn: 'none',
+     mustHitOn: 'none',
    };
 
   attacks: number = 1;
@@ -339,7 +343,13 @@ export class EpwhammerService {
       actualStrength += this.actualBaseStrength;
     }
     let hitOn: number = this.toHit(precision, modifiers.Hit);
+    if (modifiers.mustHitOn !== 'none') {
+      hitOn = this.toHit(modifiers.mustHitOn, 0);
+    }
     let woundOn: number = this.toWound(actualStrength, Toughness, modifiers.Wound);
+    if (modifiers.mustWoundOn !== 'none') {
+      woundOn = this.toHit(modifiers.mustWoundOn, 0);
+    }
     let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers);
     Attacks = this.estimateVal(Attacks);
     hitOn = (7 - hitOn) / 6;
@@ -377,7 +387,13 @@ export class EpwhammerService {
       actualStrength += this.baseStrength;
     }
     let hitOn: number = this.toHit(precision, modifiers.Hit);
+    if (modifiers.mustHitOn !== 'none') {
+      hitOn = this.toHit(modifiers.mustHitOn, 0);
+    }
     let woundOn: number = this.toWound(actualStrength, Toughness, modifiers.Wound);
+    if (modifiers.mustWoundOn !== 'none') {
+      woundOn = this.toHit(modifiers.mustWoundOn, 0);
+    }
     let chosenSv: number = this.chooseSv(this.estimateVal(Ap), Sv, SvInv, modifiers);
     Attacks = this.estimateVal(Attacks);
     hitOn = (7 - hitOn) / 6;
@@ -390,7 +406,8 @@ export class EpwhammerService {
     let result: number | string = 0;
     let i: number = -1;
     const damage: number = (this.estimateVal(D) * thisFnP);
-    const effectiveDamage: number = (this.calculations(Attacks, hitOn, woundOn, chosenSv));
+    let effectiveDamage: number = (this.calculations(Attacks, hitOn, woundOn, chosenSv));
+    effectiveDamage = effectiveDamage * this.actualNumberOfModels * this.actualGunsPerModels;
     if (!isNaN(effectiveDamage)) {
       if (damage === wounds) {
         result = effectiveDamage;
@@ -432,6 +449,10 @@ export class EpwhammerService {
       }
       result = this.calculateWounds(gun[i], correctprecision, T, Sv, SvInv, FnP, this.neutralModifiers);
       if (typeof (result) === 'number') {
+        result /= this.actualGunsPerModels;
+        result /= this.actualNumberOfModels;
+      }
+      if (typeof (result) === 'number') {
         total += result;
       }
     }
@@ -452,6 +473,10 @@ export class EpwhammerService {
         correctprecision = precision[2];
       }
       result = this.calculateDeadModels(gun[i], correctprecision, T, Sv, SvInv, FnP, this.neutralModifiers, wounds);
+      if (typeof (result) === 'number') {
+        result /= this.actualGunsPerModels;
+        result /= this.actualNumberOfModels;
+      }
       if (typeof (result) === 'number') {
         if (!isNaN(result)) {
           total += result;

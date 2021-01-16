@@ -193,7 +193,7 @@ describe('function Wound test', () => {
   });
 });
 
-describe('function estamate Value test', () => {
+describe('function estiamate Value test', () => {
   let service: EpwhammerService;
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -645,6 +645,26 @@ describe('function Calculate Dead test', () => {
     }, wounds);
     expect(result).toEqual(1);
   });
+
+  it('calculateDead should return preresult + 1', () => {
+    const S: number = 3.86;
+    const Ap: number = -1;
+    const NoS: number | string = 4;
+    const D: number | string = 'D3';
+    const Toughness: number = 3;
+    const Sv: number = 5;
+    const SvInv: number = 7;
+    const wounds: number = 1;
+    const FnP: number = 7;
+    const Wound: number = 0;
+    const Save: number = 0;
+    const hittingOn: string = '3+';
+
+    const result = service.calculateDeadModels({
+      ...gun, S, Ap, NoS, D,
+    }, hittingOn, Toughness, Sv, SvInv, FnP, { ...modifiers, Wound, Save }, wounds);
+    expect(result).toEqual(1);
+  });
 });
 
 describe('function Faction Average Wounds', () => {
@@ -739,6 +759,24 @@ describe('function Faction Average models killed', () => {
     }], hittingOn, Toughness, Sv, SvInv, FnP, wounds);
     expect(serviceSpyCalculateWounds).toHaveBeenCalled();
   });
+  it('melee weapons', () => {
+    const S: number = 4;
+    const Range = 'Melee';
+    const Ap: number = 0;
+    const NoS: number | string = 1;
+    const D: number | string = 1;
+    const Toughness: number = 8;
+    const Sv: number = 2;
+    const SvInv: number = 4;
+    const FnP: number = 7;
+    const wounds: number = 30;
+    const hittingOn: string[] = ['3+', '3+'];
+
+    service.factionAverageModelsKilled([{
+      ...gun, S, Ap, NoS, D, Range,
+    }], hittingOn, Toughness, Sv, SvInv, FnP, wounds);
+    expect(serviceSpyCalculateWounds).toHaveBeenCalled();
+  });
   it('if total lesser than 0', () => {
     const S: number = 4;
     const Ap: number = 0;
@@ -777,10 +815,41 @@ describe('function setModifiers', () => {
       rerollWounds: 'none',
       rerollSaved: 'none',
       rerollDamage: 'none',
+      mustWoundOn: 'none',
+      mustHitOn: 'none',
     };
     service.setModifiers(newModifiers);
 
     expect(service.currentModifiers).toEqual(newModifiers);
+  });
+});
+describe('function set Number of Models', () => {
+  let service: EpwhammerService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(EpwhammerService);
+  });
+  it('setNumberOfModels returns new modifiers', () => {
+    const newNumberModels = 3;
+    service.setNumberOfModels(newNumberModels);
+
+    expect(service.numberOfModels).toEqual(3);
+  });
+});
+
+describe('function set Number of guns per Model', () => {
+  let service: EpwhammerService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(EpwhammerService);
+  });
+  it('setNumberOfModels returns new modifiers', () => {
+    const newNumberModels = 2;
+    service.setGunsPerfModels(newNumberModels);
+
+    expect(service.gunsPerModels).toEqual(2);
   });
 });
 
@@ -798,6 +867,8 @@ describe('determineRerollEffect test', () => {
     rerollWounds: 'none',
     rerollSaved: 'none',
     rerollDamage: 'none',
+    mustWoundOn: 'none',
+    mustHitOn: 'none',
   };
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -861,6 +932,8 @@ describe('calculateRerollDamage test', () => {
     rerollWounds: 'none',
     rerollSaved: 'none',
     rerollDamage: 'none',
+    mustWoundOn: 'none',
+    mustHitOn: 'none',
   };
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -1073,6 +1146,8 @@ describe('calculateRerollDamage test', () => {
         rerollWounds: 'none',
         rerollSaved: 'none',
         rerollDamage: 'none',
+        mustWoundOn: 'none',
+        mustHitOn: 'none',
       };
       const alsoMyModifiers = service.modifiers;
 

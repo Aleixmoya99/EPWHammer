@@ -163,6 +163,14 @@ export class AverageChosenComponent implements OnInit, AfterViewInit {
     this.epwhammerService.SetActualBaseStrength(this.actualStrength);
   }
 
+  setUnitSize() {
+    this.epwhammerService.setNumberOfModels(this.numberOfModels);
+  }
+
+  setGunsPerfModels() {
+    this.epwhammerService.setGunsPerfModels(this.gunsPerfModels);
+  }
+
   setStats(chosenFaction: string) {
     switch (chosenFaction) {
       case 'Astartes':

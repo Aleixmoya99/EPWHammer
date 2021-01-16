@@ -28,6 +28,8 @@ export class HomeComponent {
     rerollWounds: 'none',
     rerollSaved: 'none',
     rerollDamage: 'none',
+    mustWoundOn: 'none',
+    mustHitOn: 'none',
   };
 
   openModal() {

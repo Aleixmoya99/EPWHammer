@@ -10,4 +10,6 @@ export interface Modifiers {
     rerollWounds: string,
     rerollSaved: string,
     rerollDamage: string,
+    mustWoundOn: string,
+    mustHitOn: string,
 }

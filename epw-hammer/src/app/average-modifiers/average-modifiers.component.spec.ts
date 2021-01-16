@@ -53,6 +53,8 @@ describe('Save Function', () => {
       rerollWounds: 'none',
       rerollSaved: 'none',
       rerollDamage: 'none',
+      mustWoundOn: 'none',
+      mustHitOn: 'none',
     };
     component.resetModifiers();
     expect(component.epwhammerService.currentModifiers).toEqual(newModifiers);

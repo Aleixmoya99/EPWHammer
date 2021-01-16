@@ -28,7 +28,7 @@
     <div id="precision">
       <p id='precisionName' style="padding-top: 2px;">Unit Size</p>
       <label>
-        <input id='attribute' type="text" [(ngModel)]='numberOfModels'/>
+        <input id='attribute' type="number" (change)="setUnitSize()" [(ngModel)]='numberOfModels'/>
       </label>
     </div>
   </div>
@@ -54,10 +54,9 @@
     <div id="attributes">
       <p id='attributeName'>Guns per Model</p>
       <label>
-        <input id='attribute' type="text" [(ngModel)]='gunsPerfModels'/>
+        <input id='attribute' type="number" (change)="setGunsPerfModels()" [(ngModel)]='gunsPerfModels'/>
       </label>
     </div>
-    <div class="button_cont" style="margin-top:3%" (click)="saveRange()"><span class="smallButton"><span>Confirm</span></span></div>
   </div>
 <table id="selctedweaponTable">
   <caption style="display: none;">selected weapon table</caption>

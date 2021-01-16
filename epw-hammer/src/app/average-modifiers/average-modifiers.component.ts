@@ -14,6 +14,16 @@ import { EpwhammerService } from '../epwhammer.service';
 export class AverageModifiersComponent implements OnInit {
   actualModifiers: Modifiers | any;
 
+  statList: string[] = ['none', '2+', '3+', '4+', '5+', '6+'];
+
+  maxModifier: number[] = [0, 1, -1];
+
+  apModifier: number[] = [0, -1, -2, -3, -4, -5];
+
+  saveModifier: number[] = [0, -1, -2, -3, 1, 2, 3];
+
+  Invul: number[] = [7, 0, 2, 3, 4, 5, 6];
+
   rerollList: string[] = ['none', '1s', 'All Failed', '6s', 'All Successful'];
 
   damageRerrollList: string[] = ['Reroll Favorable', 'Reroll Disfavorable', 'none'];
@@ -37,6 +47,8 @@ export class AverageModifiersComponent implements OnInit {
       rerollWounds: 'none',
       rerollSaved: 'none',
       rerollDamage: 'none',
+      mustWoundOn: 'none',
+      mustHitOn: 'none',
     };
     this.epwhammerService.setModifiers(originalModifiers);
     this.actualModifiers = originalModifiers;

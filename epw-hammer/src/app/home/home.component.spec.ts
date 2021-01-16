@@ -50,6 +50,8 @@ describe('HomeComponent', () => {
       rerollWounds: 'none',
       rerollSaved: 'none',
       rerollDamage: 'none',
+      mustWoundOn: 'none',
+      mustHitOn: 'none',
     };
     const myModifiers = component.getInitialModifiers();
 
@@ -68,6 +70,8 @@ describe('HomeComponent', () => {
       rerollWounds: 'none',
       rerollSaved: 'none',
       rerollDamage: 'none',
+      mustWoundOn: 'none',
+      mustHitOn: 'none',
     };
     component.initialModifiers = mockSetModifiers;
     const myModifiers = component.setInitialModifiers();

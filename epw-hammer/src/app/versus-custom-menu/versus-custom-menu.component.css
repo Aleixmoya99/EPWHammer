@@ -15,8 +15,8 @@ main   {
     text-align: center;
     text-transform: uppercase;
     font-size: 15px;
-    padding: 20px;
-    width: 150px;
+    padding: 10px;
+    width: 200px;
     transition: all 0.4s;
     cursor: pointer;
   }
@@ -41,10 +41,8 @@ main   {
     opacity: 1;
     right: 0;
   }
-  input{
-    max-width: 80%;
-  }
-  #allweaponTable{
+
+  #baseLineTable{
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     text-align: center;
@@ -53,20 +51,123 @@ main   {
   th{
     text-align: center;
   }
-  #allweaponTable td, #allweaponTable th {
-    max-width: 30px;
-    border: 1px solid #ddd;
-    padding: 4px;
-  }
 
-  #allweaponTable tr:nth-child(even){background-color: #5ed462a4;}
-  
-  #allweaponTable th {
+  #baseLineTable th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: center;
-    background-color: #4CAF50;
+    background-color: #83b6df;
     color: white;
     position: sticky;
     top: 0;
+    max-width: 30px;
+    padding: 4px;
+  }
+  #Stat{
+    border: 1px solid #ddd;
+    max-width: 30px;
+  }
+  #modelTable{
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    text-align: center;
+    margin-bottom: 5%;
+    min-width: 76%;
+  }
+  th{
+    text-align: center;
+  }
+  #modelTable tr:nth-child(even){background-color: #83b5df;}
+
+  #modelTable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #83b6df94;
+    color: white;
+    position: sticky;
+    top: 0;
+    max-width: 30px;
+    padding: 4px;
+  }
+
+
+  .inp {
+    position: relative;
+    margin: auto;
+    width: 100%;
+    max-width: 280px;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .inp .label {
+    position: absolute;
+    top: 20px;
+    left: 12px;
+    font-size: 16px;
+    color:  white;
+    font-weight: 500;
+    border-radius: 8px;
+    transform-origin: 0 0;
+    transform: translate3d(0, 0, 0);
+    transition: all 0.2s ease;
+    pointer-events: none;
+  }
+  .inp .focus-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #83b6df;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .inp input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    text-align: center;
+    border-radius: 8px;
+    border: 0;
+    font-family: inherit;
+    padding: 16px 12px 0 12px;
+    height: 56px;
+    font-size: 16px;
+    font-weight: 700;
+    background:#83b6dfc4;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+    color:  WHITE;
+    transition: all 0.15s ease;
+  }
+  .inp input:hover {
+    background: #83b6df88;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+  }
+  .inp input:not(:-moz-placeholder-shown) + .label {
+    color: rgba(0, 0, 0, 0.5);
+    transform: translate3d(0, -12px, 0) scale(0.75);
+  }
+  .inp input:not(:-ms-input-placeholder) + .label {
+    color: rgba(0, 0, 0, 0.5);
+    transform: translate3d(0, -12px, 0) scale(0.75);
+  }
+  .inp input:not(:placeholder-shown) + .label {
+    color:white;
+    transform: translate3d(0, -12px, 0) scale(0.75);
+  }
+  .inp input:focus {
+    background: #83b6df88;
+    outline: none;
+    box-shadow: inset 0 -2px 0  white;
+  }
+  .inp input:focus + .label {
+    color:   white;
+    transform: translate3d(0, -12px, 0) scale(0.9);
+  }
+  .inp input:focus + .label + .focus-bg {
+    transform: scaleX(1);
+    transition: all 0.1s ease;
   }
