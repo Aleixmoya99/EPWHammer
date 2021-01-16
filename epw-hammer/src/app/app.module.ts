@@ -1,7 +1,8 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,6 +22,7 @@ import { VersusChoose2Component } from './versus-choose2/versus-choose2.componen
 import { VersusBeginComponent } from './versus-begin/versus-begin.component';
 import { VersusOutputComponent } from './versus-output/versus-output.component';
 import { VersusModifiersComponent } from './versus-modifiers/versus-modifiers.component';
+import { AverageChosenComponent } from './average-chosen/average-chosen.component';
 import { VersusOptionsComponent } from './versus-options/versus-options.component';
 import { IssueService } from './issue.service';
 
@@ -30,25 +32,27 @@ import { PopUpChoseAverageComponent } from './pop-up-chose-average/pop-up-chose-
 @NgModule({
   declarations: [
     AppComponent,
+    AverageChosenComponent,
+    AverageModifiersComponent,
     HomeComponent,
-    VersusMenuComponent,
-    VersusCustomMenuComponent,
-    VersusCustomMenu2Component,
+    PopUpChoseAverageComponent,
+    VersusBeginComponent,
+    VersusChooseComponent,
+    VersusChoose2Component,
     VersusCustomInsertUnitComponent,
     VersusCustomInsertWeaponComponent,
-    VersusChooseComponent,
-    VersusBeginComponent,
-    VersusOutputComponent,
-    VersusModifiersComponent,
-    VersusOptionsComponent,
-    AverageModifiersComponent,
-    PopUpChoseAverageComponent,
-    VersusChoose2Component,
+    VersusCustomMenuComponent,
     VersusCustomMenu2Component,
+    VersusMenuComponent,
+    VersusModifiersComponent,
+    VersusOutputComponent,
+    VersusOptionsComponent,
   ],
   imports: [
-    FormsModule,
     BrowserModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
